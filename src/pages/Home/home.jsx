@@ -1,0 +1,71 @@
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+import { useUserContext } from "../../context/userContext";
+import { db, auth } from "../../firebase";
+import { signOut } from "firebase/auth";
+import { collection, setDoc, doc } from "firebase/firestore";
+import "./home.css";
+const home = () => {
+  const [error, setError] = useState("");
+  const [loadSignOut, setLoadSignOut] = useState(false);
+  const { currentUserDB, isLoggedIn, loading, loadingCurrentUser } =
+    useUserContext();
+
+  const navigate = useNavigate();
+  const { authCurrentUser } = useAuth();
+  function signOutFunc() {
+    signOut(auth)
+      .then(() => {
+        console.log("SIGNOUT");
+      })
+      .catch((error) => {
+        // An error happened.
+      });
+  }
+  //   console.log(currentUserDB, loadingCurrentUser, loading);
+  useEffect(() => {
+    if (!currentUserDB && !loadingCurrentUser) {
+      //   navigate("/signup");
+    }
+  }, [currentUserDB, loading]);
+
+  async function handleLogOut() {
+    setError("");
+
+    setLoadSignOut(true);
+    try {
+      const userId = currentUserDB && currentUserDB.id;
+
+      const logOutRef = doc(db, "users", userId);
+      const userRefs = collection(db, "users");
+      signOutFunc();
+      console.log("SIGNOUT");
+      setLoadSignOut(false);
+      navigate("/signup");
+    } catch {
+      setError("Failed to log out");
+    }
+  }
+  function goChat() {
+    navigate("/chatroom");
+  }
+  console.log(currentUserDB && currentUserDB.email);
+
+  return (
+    <>
+      {loadSignOut ? (
+        <div>SIGNINGOUT</div>
+      ) : (
+        <>
+          {" "}
+          <div className="name">{currentUserDB && currentUserDB.email}</div>
+          <button onClick={handleLogOut}>Sign out</button>
+          <button onClick={goChat}>Chatroom</button>
+        </>
+      )}
+    </>
+  );
+};
+
+export default home;

@@ -1,0 +1,18 @@
+.groupsPopup__user-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  margin-bottom: 1rem;
+}
+.groupsPopup__user-list li {
+  background-color: rgb(53, 99, 140);
+  margin: 0;
+  padding: 0;
+  margin-bottom: 1rem;
+  padding: 1rem;
+}
+
+.groupsPopup__user-list li:hover {
+  cursor: pointer;
+  background-color: rgb(126, 225, 245);
+}
