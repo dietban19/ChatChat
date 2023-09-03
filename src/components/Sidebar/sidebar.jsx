@@ -5,7 +5,7 @@ import { useMessageContext } from "../../context/useMessages";
 import { useAuth } from "../../context/AuthContext";
 import Groups from "../Group/group.jsx";
 import "./sidebar.css";
-const sidebar = () => {
+const sidebar = ({ setShowSidebar }) => {
   const { users } = useUserContext();
   const [showGroupsPopup, setShowGroupsPopup] = useState(false);
   const navigate = useNavigate();

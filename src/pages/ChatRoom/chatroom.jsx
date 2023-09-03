@@ -43,6 +43,7 @@ const Chatroom = () => {
   const [messagesToDisplay, setMessagesToDisplay] = useState([]);
   const [groupToDisplay, setGroupToDisplay] = useState([]);
   const [namesInGroup, setNamesInGroup] = useState([]);
+  const [showSidebar, setShowSidebar] = useState(false);
   const scrollRef = useRef();
   useEffect(() => {
     if (
@@ -149,10 +150,10 @@ const Chatroom = () => {
   }, [selectedMessageID, allMessages]);
   console.log("SELECTEDMESSage", selectedMessageID);
   console.log(namesInGroup);
-
+  console.log("SDOIHFOSHDFOIHSDOIFHOSIDHF", showSidebar);
   return (
     <div className="chatWrapper">
-      <Sidebar />
+      {showSidebar && <Sidebar setShowSidebar={setShowSidebar} />}
       <div className="chatRoomContainer">
         {namesInGroup.length > 0 ? (
           <>
@@ -166,10 +167,21 @@ const Chatroom = () => {
               ) : (
                 "No names in group"
               )}
+              <button
+                onClick={() => {
+                  setShowSidebar(!showSidebar);
+                }}
+              >
+                SHOW
+              </button>
             </div>
             <div className="chatRoomMessages">
               {messagesToDisplay.map((msg, index) => (
-                <ChatMessage key={index} message={msg} />
+                <ChatMessage
+                  key={index}
+                  message={msg}
+                  setShowSidebar={setShowSidebar}
+                />
               ))}
               <div ref={scrollRef} className="scrollToView"></div>
             </div>

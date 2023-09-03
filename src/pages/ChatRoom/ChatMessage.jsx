@@ -4,6 +4,7 @@ import "./chatroom.css";
 import { useUserContext } from "../../context/userContext";
 const ChatMessage = (props) => {
   const { id, messageText, sentBy } = props.message;
+  const { setShowSidebar } = props.setShowSidebar;
   const { currentUserDB } = useUserContext();
   //   console.log("FEF", sentBy);
   //   console.log(currentUserDB);
