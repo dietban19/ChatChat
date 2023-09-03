@@ -25,10 +25,11 @@ const home = () => {
   }
   //   console.log(currentUserDB, loadingCurrentUser, loading);
   useEffect(() => {
+    console.log(currentUserDB);
+    console.log(loadingCurrentUser);
     if (!currentUserDB && loadingCurrentUser) {
       //   navigate("/signup");
-      console.log(currentUserDB);
-      console.log(loadingCurrentUser);
+
       console.log("go signup");
     }
   }, [currentUserDB, loading]);
