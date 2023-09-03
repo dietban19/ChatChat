@@ -23,14 +23,11 @@ const Signup = () => {
   const passwordConfirmRef = useRef();
   const { loadingCurrentUser, currentUserDB } = useUserContext();
   const [loading, setLoading] = useState(false);
-  console.log(loadingCurrentUser);
-  console.log(currentUserDB);
 
   useEffect(() => {
-    console.log("CURRENT", currentUserDB);
+    console.log("CURRENT", loadingCurrentUser);
     if (!loadingCurrentUser) {
       console.log("CURRENT USER", currentUserDB);
-      // if not still loading
       if (currentUserDB) {
         console.log("go home");
         // navigate("/home");

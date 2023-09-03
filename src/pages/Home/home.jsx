@@ -11,7 +11,7 @@ const home = () => {
   const [loadSignOut, setLoadSignOut] = useState(false);
   const { currentUserDB, isLoggedIn, loading, loadingCurrentUser } =
     useUserContext();
-  console.log("HOME");
+  //   console.log("HOME");
   const navigate = useNavigate();
   const { authCurrentUser } = useAuth();
   function signOutFunc() {
