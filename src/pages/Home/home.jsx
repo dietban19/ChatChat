@@ -31,7 +31,7 @@ const home = () => {
       // if not still loading
       if (!currentUserDB) {
         console.log("go signup");
-        // navigate("/signup");
+        navigate("/signup");
       }
     }
   }, [currentUserDB, loading]);
