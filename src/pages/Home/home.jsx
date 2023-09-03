@@ -25,8 +25,8 @@ const home = () => {
   }
   //   console.log(currentUserDB, loadingCurrentUser, loading);
   useEffect(() => {
-    console.log(currentUserDB);
-    console.log(loadingCurrentUser);
+    console.log("CURRENT USER", currentUserDB);
+    console.log("LOADING", loadingCurrentUser);
     if (!currentUserDB && loadingCurrentUser) {
       //   navigate("/signup");
 
