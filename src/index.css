@@ -3,6 +3,7 @@
   --message-blue: hsl(204, 86%, 53%);
   --message-green: hsl(145, 63%, 45%);
   --message-grey: hsl(240, 2%, 24%);
+  --gray: hsl(220, 2%, 24%);
   --dark-background: hsl(220, 7%, 18%);
   --darker-background: hsl(223, 7%, 21%);
 }

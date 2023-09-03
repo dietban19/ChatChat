@@ -23,8 +23,19 @@ import {
 
 export default function group({ useAuth, useUserContext }) {
   const { users, currentUserDB } = useUserContext();
-  const [groups, setGroups] = useState([]);
-  const { newMessage, setSelectedMessageID, selectedMessageID } =
+  console.log(users);
+  const [filteredUsers, setFilteredUsers] = useState([]);
+
+  useEffect(() => {
+    if (currentUserDB.username) {
+      const result = users.filter(
+        (user) => user.username !== currentUserDB.username
+      );
+      setFilteredUsers(result);
+    }
+  }, [users]); // The effect depends on the `users` state
+
+  const { newMessage, setSelectedMessageID, selectedMessageID, groupsID } =
     useMessageContext();
   const groupRef = collection(db, "group");
   function createNewGroupID({ otherPersonID, myId }) {
@@ -34,19 +45,7 @@ export default function group({ useAuth, useUserContext }) {
       return myId + otherPersonID;
     }
   }
-  useEffect(() => {
-    const readGroupQuery = query(collection(db, "group"));
-    //   console.log("Setting up Firestore subscription");
-    onSnapshot(readGroupQuery, (querySnapshot) => {
-      // console.log(querySnapshot.docs.map((doc) => doc.data()));
-      const messages = [];
-      querySnapshot.forEach((doc) => {
-        messages.push({ ...doc.data(), id: doc.id });
-      });
-      const ids = messages.map((item) => item.id);
-      setGroups(ids);
-    });
-  }, []);
+
   async function chooseUser({ user }) {
     if (!currentUserDB || !user) {
       console.log("NOTET");
@@ -65,7 +64,7 @@ export default function group({ useAuth, useUserContext }) {
       };
 
       // check if group exists
-      if (!groups.includes(groupID)) {
+      if (!groupsID.includes(groupID)) {
         console.log("MAKONG A NEW ONE");
         const groupDocRef = doc(db, "group", groupID);
         //make the new group
@@ -79,18 +78,14 @@ export default function group({ useAuth, useUserContext }) {
         const addUserDocRef = doc(db, "users", user.id);
         updateDoc(addUserDocRef, { groups: [groupID] });
         await newMessage({ groupID });
+        const messageRef = doc(db, "message", groupID);
+        setDoc(messageRef, {});
+      } else {
+        console.log("MADE ALREADYT");
       }
 
       setSelectedMessageID(groupID);
-      const messageRef = doc(db, "message", groupID);
-      const messageData = {
-        messageText: "",
-        sentAt: serverTimestamp(),
-        sentBy: currentUserDB.username,
-      };
-      //   console.log(messageData);
-
-      setDoc(messageRef, {});
+      console.log(selectedMessageID);
     }
   }
 
@@ -98,7 +93,7 @@ export default function group({ useAuth, useUserContext }) {
     <div className="groupsPopup">
       <h2>Choose A user</h2>
       <ul className="groupsPopup__user-list">
-        {users.map((user) => (
+        {filteredUsers.map((user) => (
           <li key={user.id} onClick={() => chooseUser({ user, currentUserDB })}>
             {user.username}
           </li>

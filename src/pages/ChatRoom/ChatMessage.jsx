@@ -5,7 +5,7 @@ import { useUserContext } from "../../context/userContext";
 const ChatMessage = (props) => {
   const { id, messageText, sentBy } = props.message;
   const { currentUserDB } = useUserContext();
-  console.log("FEF", sentBy);
+  //   console.log("FEF", sentBy);
   //   console.log(currentUserDB);
   const { authCurrentUser } = useAuth();
 
@@ -19,8 +19,8 @@ const ChatMessage = (props) => {
     >
       <div className="message">
         <div className="details">
-          <div className="name">Dits</div>
-          <div className="timestamp">july 6</div>
+          <div className="name">{sentBy.username}</div>
+          {/* <div className="timestamp">july 6</div> */}
         </div>
         <div className="messageBubble">
           {" "}

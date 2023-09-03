@@ -23,12 +23,11 @@ const sidebar = () => {
 
   return (
     <div className="sidebar">
-      <h2>Users</h2>
-      <ul className="user-list">
+      {/* <ul className="user-list">
         {users.map((user) => (
           <li key={user.id}>{user.username}</li>
         ))}
-      </ul>
+      </ul> */}
       <button onClick={handleProfile}>Profile</button>
       <button onClick={() => setShowGroupsPopup((prevOpen) => !prevOpen)}>
         {!showGroupsPopup ? (

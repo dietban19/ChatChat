@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useContext, Fragment } from "react";
+import React, {
+  useState,
+  useEffect,
+  useContext,
+  Fragment,
+  useRef,
+} from "react";
 import { useNavigate } from "react-router-dom";
 
 import "./chatroom.css";
@@ -32,10 +38,12 @@ const Chatroom = () => {
   const [messagesData, setMessagesData] = useState([]);
   const [allMessages, setAllMessages] = useState([]);
   const { currentUserDB } = useUserContext();
-  const groups = currentUserDB.groups;
-  const { selectedMessageID } = useMessageContext();
-  //   console.log(currentUserDB.groups);
 
+  const { selectedMessageID, groups } = useMessageContext();
+  const [messagesToDisplay, setMessagesToDisplay] = useState([]);
+  const [groupToDisplay, setGroupToDisplay] = useState([]);
+  const [namesInGroup, setNamesInGroup] = useState([]);
+  const scrollRef = useRef();
   useEffect(() => {
     if (
       currentUserDB &&
@@ -43,7 +51,7 @@ const Chatroom = () => {
       currentUserDB.groups.length > 0
     ) {
       const group = currentUserDB && [...currentUserDB.groups];
-
+      console.log("GROUPSPGUSPUDGPSUDGPUSDPGUSGD", group);
       const unsubscribes = [];
       setAllMessages([]);
       let x = 0;
@@ -61,7 +69,7 @@ const Chatroom = () => {
             messages.push({ ...doc.data(), id: doc.id });
           });
           x += 1;
-          console.log(messages);
+          console.log("MESSAGES", messages);
           //   console.log(x, messages);
           setAllMessages((prevMessages) => ({
             ...prevMessages,
@@ -97,6 +105,7 @@ const Chatroom = () => {
       });
 
       setFormValue("");
+      scrollRef.current.scrollIntoView({ behavior: "smooth" });
     } else {
       console.error("No group ID selected.");
     }
@@ -110,37 +119,72 @@ const Chatroom = () => {
     console.log("SENIND");
     newMessageRef();
   };
-  const [messagesToDisplay, setMessagesToDisplay] = useState([]);
 
   useEffect(() => {
+    console.log("slectedMEDDAGEISD", selectedMessageID);
+    console.log("ALL", allMessages);
     if (selectedMessageID && allMessages[selectedMessageID]) {
+      console.log("WORKING");
       setMessagesToDisplay(allMessages[selectedMessageID]);
+      const selectedGroup = groups.find(
+        (item) => item.id === selectedMessageID
+      );
+      setGroupToDisplay(selectedGroup);
+      if (selectedGroup && currentUserDB.username) {
+        console.log("CURRENT NAME", selectedGroup);
+        const groupMembers = selectedGroup.members;
+        console.log("GROUPmembers", groupMembers);
+        if (groupMembers) {
+          const filteredNames = groupMembers.filter(
+            (names) => names.username != currentUserDB.username
+          );
+          console.log(filteredNames);
+          setNamesInGroup(filteredNames);
+        }
+      }
     } else {
       setMessagesToDisplay([]);
+      setGroupToDisplay([]);
     }
   }, [selectedMessageID, allMessages]);
-  //   console.log(messagesToDisplay);
+  console.log("SELECTEDMESSage", selectedMessageID);
+  console.log(namesInGroup);
+
   return (
     <div className="chatWrapper">
       <Sidebar />
       <div className="chatRoomContainer">
-        <div className="chatRoomHeader">NAME</div>
-        <div className="chatRoomMessages">
-          {" "}
-          {messagesToDisplay.map((msg, index) => (
-            <ChatMessage key={index} message={msg} />
-          ))}
-        </div>
-
-        <form onSubmit={sendMessage}>
-          <input
-            type="text"
-            value={formValue}
-            onChange={(e) => setFormValue(e.target.value)}
-          />
-          <button type="submit">Send</button>
-          <button onClick={() => console.log(messagesData)}>Button</button>
-        </form>
+        {namesInGroup.length > 0 ? (
+          <>
+            <div className="chatRoomHeader">
+              {namesInGroup.length > 0 ? (
+                <>
+                  {namesInGroup.map((user, index) => (
+                    <div key={index}>{user.username}</div>
+                  ))}
+                </>
+              ) : (
+                "No names in group"
+              )}
+            </div>
+            <div className="chatRoomMessages">
+              {messagesToDisplay.map((msg, index) => (
+                <ChatMessage key={index} message={msg} />
+              ))}
+              <div ref={scrollRef} className="scrollToView"></div>
+            </div>
+            <form onSubmit={sendMessage}>
+              <input
+                type="text"
+                value={formValue}
+                onChange={(e) => setFormValue(e.target.value)}
+              />
+              <button type="submit">Send</button>
+            </form>
+          </>
+        ) : (
+          <div></div>
+        )}
       </div>
       {/* <button onClick={sendM}>SE</button> */}
     </div>

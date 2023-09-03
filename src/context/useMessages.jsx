@@ -22,6 +22,8 @@ export function MessageProvider({ children }) {
   const messageRef = collection(db, "messages");
   const [selectedMessageID, setSelectedMessageID] = useState("");
   const myQuery = query(messageRef, orderBy("createdAt"), limit(25));
+  const [groups, setGroups] = useState([]);
+  const [groupsID, setGroupsID] = useState([]);
   useEffect(() => {
     console.log("Setting up Firestore subscription");
     onSnapshot(myQuery, (querySnapshot) => {
@@ -32,6 +34,20 @@ export function MessageProvider({ children }) {
       });
       // console.log("TEST", doc.id);
       setMessagesData(messages);
+    });
+  }, []);
+  useEffect(() => {
+    const readGroupQuery = query(collection(db, "group"));
+    //   console.log("Setting up Firestore subscription");
+    onSnapshot(readGroupQuery, (querySnapshot) => {
+      // console.log(querySnapshot.docs.map((doc) => doc.data()));
+      const messages = [];
+      querySnapshot.forEach((doc) => {
+        messages.push({ ...doc.data(), id: doc.id });
+      });
+      const ids = messages.map((item) => item.id);
+      setGroups(messages);
+      setGroupsID(ids);
     });
   }, []);
   const [formValue, setFormValue] = useState("");
@@ -54,7 +70,13 @@ export function MessageProvider({ children }) {
     const messagesRef = collection(groupMessageRef, "messages");
     addDoc(messagesRef, {});
   };
-  const messageVals = { newMessage, setSelectedMessageID, selectedMessageID };
+  const messageVals = {
+    newMessage,
+    setSelectedMessageID,
+    selectedMessageID,
+    groupsID,
+    groups,
+  };
   // const [messages] = useCollectionData(myQuery, { idField: "id" });
   return (
     <MessageContext.Provider value={messageVals}>
