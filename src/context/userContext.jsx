@@ -47,18 +47,28 @@ export function UserProvider({ children }) {
   };
 
   useEffect(() => {
-    // getUsers();
     console.log("true");
-    if (authCurrentUser && authCurrentUser.uid && users.length > 0) {
-      const currentUser = getDatabaseInfo(authCurrentUser.uid);
 
-      setCurrentUserDB(currentUser);
-      setIsLoggedIn(true);
-    } else {
-      console.log("NOTRUNNING");
-    }
-    console.log("false");
-    setLoadingCurrentUser(false);
+    const loadCurrentUser = async () => {
+      if (authCurrentUser && authCurrentUser.uid && users.length > 0) {
+        const currentUser = await getDatabaseInfo(authCurrentUser.uid); // Assuming getDatabaseInfo is asynchronous
+
+        // Set currentUserDB only if it's not empty or undefined
+        if (currentUser) {
+          setCurrentUserDB(currentUser);
+          setIsLoggedIn(true);
+          setLoadingCurrentUser(false);
+        } else {
+          console.log("currentUser is empty or undefined");
+          // Optionally, set setLoadingCurrentUser(false) here too, depending on your needs
+        }
+      } else {
+        console.log("NOTRUNNING");
+        setLoadingCurrentUser(false);
+      }
+    };
+
+    loadCurrentUser();
   }, [authCurrentUser, users]);
   const userValues = {
     userRef,

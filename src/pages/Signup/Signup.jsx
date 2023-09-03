@@ -28,13 +28,15 @@ const Signup = () => {
 
   useEffect(() => {
     console.log("CURRENT", currentUserDB);
-    if (currentUserDB) {
-      console.log("asdf");
-      // navigate("/home");
-    } else {
-      console.log("EMPTY");
+    if (!loadingCurrentUser) {
+      console.log("CURRENT USER", currentUserDB);
+      // if not still loading
+      if (currentUserDB) {
+        console.log("go home");
+        // navigate("/home");
+      }
     }
-  }, []);
+  }, [currentUserDB, loadingCurrentUser]);
   async function addNewUser(result) {
     console.log("step 3");
     console.log(result);
