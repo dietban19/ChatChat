@@ -27,8 +27,12 @@ const Signup = () => {
   console.log(currentUserDB);
 
   useEffect(() => {
+    console.log("CURRENT", currentUserDB);
     if (currentUserDB) {
+      console.log("asdf");
       // navigate("/home");
+    } else {
+      console.log("EMPTY");
     }
   }, []);
   async function addNewUser(result) {
