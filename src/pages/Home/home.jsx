@@ -32,13 +32,10 @@ const home = () => {
 
   async function handleLogOut() {
     setError("");
-
+    console.log("TRUE");
     setLoadSignOut(true);
+    console.log("asdf");
     try {
-      const userId = currentUserDB && currentUserDB.id;
-
-      const logOutRef = doc(db, "users", userId);
-      const userRefs = collection(db, "users");
       signOutFunc();
       console.log("SIGNOUT");
       setLoadSignOut(false);
