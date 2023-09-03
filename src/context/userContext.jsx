@@ -51,6 +51,7 @@ export function UserProvider({ children }) {
     console.log("true");
     if (authCurrentUser && authCurrentUser.uid && users.length > 0) {
       const currentUser = getDatabaseInfo(authCurrentUser.uid);
+
       setCurrentUserDB(currentUser);
       setIsLoggedIn(true);
     } else {
