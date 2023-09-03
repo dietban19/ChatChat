@@ -26,7 +26,6 @@ export function UserProvider({ children }) {
   const userRef = collection(db, "users");
   const [currentUserDB, setCurrentUserDB] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [groups, setGroups] = useState([]);
 
   const userQuery = query(userRef);
   async function getUsers() {}
@@ -37,7 +36,7 @@ export function UserProvider({ children }) {
         users.push(doc.data());
       });
       setUsers(users);
-
+      console.log(users);
       setLoading(false);
     });
   }, []);
@@ -46,30 +45,18 @@ export function UserProvider({ children }) {
 
     return findUser;
   };
-  useEffect(() => {
-    const readGroupQuery = query(collection(db, "group"));
-    //   console.log("Setting up Firestore subscription");
-    onSnapshot(readGroupQuery, (querySnapshot) => {
-      // console.log(querySnapshot.docs.map((doc) => doc.data()));
-      const messages = [];
-      querySnapshot.forEach((doc) => {
-        messages.push({ ...doc.data(), id: doc.id });
-      });
-      const ids = messages.map((item) => item.id);
-      setGroups(ids);
-    });
-  }, []);
 
   useEffect(() => {
     // getUsers();
-
+    console.log("true");
     if (authCurrentUser && authCurrentUser.uid && users.length > 0) {
       const currentUser = getDatabaseInfo(authCurrentUser.uid);
       setCurrentUserDB(currentUser);
       setIsLoggedIn(true);
     } else {
-      // console.log("NOTRUNNING");
+      console.log("NOTRUNNING");
     }
+    console.log("false");
     setLoadingCurrentUser(false);
   }, [authCurrentUser, users]);
   const userValues = {
@@ -80,7 +67,6 @@ export function UserProvider({ children }) {
     loading,
     loadingCurrentUser,
     setLoading,
-    groups,
   };
   return (
     <UserContext.Provider value={userValues}>{children}</UserContext.Provider>
