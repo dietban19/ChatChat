@@ -6,7 +6,7 @@ import React, {
   useRef,
 } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { AiOutlineArrowRight } from "react-icons/ai";
 import "./chatroom.css";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { useMessageContext } from "../../context/useMessages.jsx";
@@ -173,13 +173,18 @@ const Chatroom = () => {
               ))}
               <div ref={scrollRef} className="scrollToView"></div>
             </div>
-            <form onSubmit={sendMessage}>
-              <input
-                type="text"
-                value={formValue}
-                onChange={(e) => setFormValue(e.target.value)}
-              />
-              <button type="submit">Send</button>
+            <form onSubmit={sendMessage} className="message-form">
+              <div className="inputContainer">
+                <input
+                  type="text"
+                  value={formValue}
+                  onChange={(e) => setFormValue(e.target.value)}
+                  placeholder="Type your message..."
+                />
+                <button type="submit" className="message-submit-button">
+                  <AiOutlineArrowRight size={16} color="white" />
+                </button>
+              </div>
             </form>
           </>
         ) : (
