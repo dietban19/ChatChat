@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useContext, Fragment } from "react";
+import React, {
+  useState,
+  useEffect,
+  useContext,
+  Fragment,
+  useRef,
+} from "react";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { auth, db } from "../firebase.jsx";
 import {
@@ -24,6 +30,7 @@ export function MessageProvider({ children }) {
   const myQuery = query(messageRef, orderBy("createdAt"), limit(25));
   const [groups, setGroups] = useState([]);
   const [groupsID, setGroupsID] = useState([]);
+  const scrollRef = useRef();
   useEffect(() => {
     console.log("Setting up Firestore subscription");
     onSnapshot(myQuery, (querySnapshot) => {
@@ -36,6 +43,8 @@ export function MessageProvider({ children }) {
       setMessagesData(messages);
     });
   }, []);
+
+  /* Creating NEW GROUP */
   useEffect(() => {
     const readGroupQuery = query(collection(db, "group"));
     //   console.log("Setting up Firestore subscription");
@@ -76,6 +85,7 @@ export function MessageProvider({ children }) {
     selectedMessageID,
     groupsID,
     groups,
+    scrollRef,
   };
   // const [messages] = useCollectionData(myQuery, { idField: "id" });
   return (

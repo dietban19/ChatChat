@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { AiOutlineArrowRight } from "react-icons/ai";
 import "./chatroom.css";
 import { useCollectionData } from "react-firebase-hooks/firestore";
-import { useMessageContext } from "../../context/useMessages.jsx";
+
 import { auth, db } from "../../firebase.jsx";
 
 import {
@@ -30,6 +30,7 @@ import {
 import Sidebar from "../../components/Sidebar/sidebar.jsx";
 import { useAuth } from "../../context/AuthContext";
 import ChatMessage from "./ChatMessage.jsx";
+import { useMessageContext } from "../../context/useMessages.jsx";
 import { useUserContext } from "../../context/userContext";
 // import { useMessages } from "../../context/useMessages";
 
@@ -38,13 +39,13 @@ const Chatroom = () => {
   const [messagesData, setMessagesData] = useState([]);
   const [allMessages, setAllMessages] = useState([]);
   const { currentUserDB } = useUserContext();
-
-  const { selectedMessageID, groups } = useMessageContext();
+  //   const {  } = useMessageContext();
+  const { selectedMessageID, groups, scrollRef } = useMessageContext();
   const [messagesToDisplay, setMessagesToDisplay] = useState([]);
   const [groupToDisplay, setGroupToDisplay] = useState([]);
   const [namesInGroup, setNamesInGroup] = useState([]);
   const [showSidebar, setShowSidebar] = useState(false);
-  const scrollRef = useRef();
+
   useEffect(() => {
     if (
       currentUserDB &&
@@ -106,7 +107,7 @@ const Chatroom = () => {
       });
 
       setFormValue("");
-      scrollRef.current.scrollIntoView({ behavior: "smooth" });
+      //   scrollRef.current.scrollIntoView({ behavior: "smooth" });
     } else {
       console.error("No group ID selected.");
     }
@@ -148,9 +149,14 @@ const Chatroom = () => {
       setGroupToDisplay([]);
     }
   }, [selectedMessageID, allMessages]);
-  console.log("SELECTEDMESSage", selectedMessageID);
-  console.log(namesInGroup);
-  console.log("SDOIHFOSHDFOIHSDOIFHOSIDHF", showSidebar);
+
+  /* Check if there is a new message, scroll if true*/
+  useEffect(() => {
+    if (scrollRef.current) {
+      console.log("new Message");
+      scrollRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messagesToDisplay]);
   return (
     <div className="chatWrapper">
       {/* {showSidebar && <Sidebar setShowSidebar={setShowSidebar} />} */}
