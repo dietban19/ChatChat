@@ -174,6 +174,13 @@ const Chatroom = () => {
               >
                 SHOW
               </button>
+              <button
+                onClick={() => {
+                  navigate("/chats");
+                }}
+              >
+                Back
+              </button>
             </div>
             <div className="chatRoomMessages">
               {messagesToDisplay.map((msg, index) => (
