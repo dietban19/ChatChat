@@ -153,7 +153,7 @@ const Chatroom = () => {
   console.log("SDOIHFOSHDFOIHSDOIFHOSIDHF", showSidebar);
   return (
     <div className="chatWrapper">
-      {showSidebar && <Sidebar setShowSidebar={setShowSidebar} />}
+      {/* {showSidebar && <Sidebar setShowSidebar={setShowSidebar} />} */}
       <div className="chatRoomContainer">
         {namesInGroup.length > 0 ? (
           <>

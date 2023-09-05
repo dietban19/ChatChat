@@ -54,7 +54,7 @@ const home = () => {
     }
   }
   function goChat() {
-    navigate("/chatroom");
+    navigate("/chats");
   }
 
   return (

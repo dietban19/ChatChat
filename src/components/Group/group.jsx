@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { auth, db } from "../../firebase.jsx";
 // import { useAuth } from "../../context/AuthContext.jsx";
 // import { useUserContext } from "../../context/userContext";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 // const { users } = useUserContext();
 import { useMessageContext } from "../../context/useMessages.jsx";
 import "./group.css";
@@ -25,7 +25,7 @@ export default function group({ useAuth, useUserContext }) {
   const { users, currentUserDB } = useUserContext();
   console.log(users);
   const [filteredUsers, setFilteredUsers] = useState([]);
-
+  const navigate = useNavigate();
   useEffect(() => {
     if (currentUserDB.username) {
       const result = users.filter(
@@ -85,6 +85,7 @@ export default function group({ useAuth, useUserContext }) {
       }
 
       setSelectedMessageID(groupID);
+      navigate("/chatroom");
       console.log(selectedMessageID);
     }
   }
