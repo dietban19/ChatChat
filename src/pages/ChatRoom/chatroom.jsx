@@ -45,7 +45,7 @@ const Chatroom = () => {
   const [groupToDisplay, setGroupToDisplay] = useState([]);
   const [namesInGroup, setNamesInGroup] = useState([]);
   const [showSidebar, setShowSidebar] = useState(false);
-
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     if (
       currentUserDB &&
@@ -71,7 +71,7 @@ const Chatroom = () => {
             messages.push({ ...doc.data(), id: doc.id });
           });
           x += 1;
-          console.log("MESSAGES", messages);
+
           //   console.log(x, messages);
           setAllMessages((prevMessages) => ({
             ...prevMessages,
@@ -123,8 +123,6 @@ const Chatroom = () => {
   };
 
   useEffect(() => {
-    console.log("slectedMEDDAGEISD", selectedMessageID);
-    console.log("ALL", allMessages);
     if (selectedMessageID && allMessages[selectedMessageID]) {
       console.log("WORKING");
       setMessagesToDisplay(allMessages[selectedMessageID]);
@@ -150,6 +148,33 @@ const Chatroom = () => {
     }
   }, [selectedMessageID, allMessages]);
 
+  /* Save Names In group */
+
+  useEffect(() => {
+    console.log("NAMES");
+    if (namesInGroup.length > 0) {
+      console.log("IT GREW");
+      setLoading(false);
+    } else {
+      console.log("fds");
+      //   navigate()
+    }
+  }, [namesInGroup]);
+
+  useEffect(() => {
+    console.log("load");
+    if (!loading) {
+      console.log("done loading");
+      if (namesInGroup.length <= 0) {
+        console.log("BAD");
+      } else {
+        console.log("GOOD");
+      }
+    }
+  }, [loading, namesInGroup]);
+
+  // Existing logic and JSX...
+  console.log(namesInGroup);
   /* Check if there is a new message, scroll if true*/
   useEffect(() => {
     if (scrollRef.current) {
@@ -157,6 +182,7 @@ const Chatroom = () => {
       scrollRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [messagesToDisplay]);
+
   return (
     <div className="chatWrapper">
       {/* {showSidebar && <Sidebar setShowSidebar={setShowSidebar} />} */}
@@ -213,7 +239,7 @@ const Chatroom = () => {
             </form>
           </>
         ) : (
-          <div></div>
+          <div>WALA</div>
         )}
       </div>
       {/* <button onClick={sendM}>SE</button> */}
