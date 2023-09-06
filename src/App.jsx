@@ -11,6 +11,7 @@ import Home from "./pages/Home/home.jsx";
 import Login from "./pages/Login/login.jsx";
 import Chatroom from "./pages/ChatRoom/chatroom.jsx";
 import Sidebar from "./components/Sidebar/sidebar.jsx";
+import Welcome from "./pages/Welcome/welcome.jsx";
 function App() {
   // const { user, currentUser } = useAuth();
   const { isLoggedIn, currentUserDB, loading, loadingCurrentUser } =
@@ -28,12 +29,13 @@ function App() {
           <>
             <Routes>
               <Route path="/home" element={<Home />} />
+              <Route path="/welcome" element={<Welcome />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/login" element={<Login />} />
               <Route path="/chatroom" element={<Chatroom />} />
               <Route path="/chats" element={<Sidebar />} />
-              <Route path="/" element={<Navigate to="/home" />} />
-              <Route path="*" element={<Navigate to="/home" />} />
+              <Route path="/" element={<Navigate to="/welcome" />} />
+              <Route path="*" element={<Navigate to="/welcome" />} />
             </Routes>
           </>
         )}
