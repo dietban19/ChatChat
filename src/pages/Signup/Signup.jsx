@@ -18,7 +18,7 @@ import { useUserContext } from "../../context/userContext.jsx";
 const provider = new GoogleAuthProvider();
 const Signup = () => {
   const emailRef = useRef();
-
+  const usernameRef = useRef();
   const passwordRef = useRef();
   const passwordConfirmRef = useRef();
   const { loadingCurrentUser, currentUserDB } = useUserContext();
@@ -114,11 +114,7 @@ const Signup = () => {
     try {
       setError("");
       // setLoading(true);
-      await Register(
-        emailRef.current.value,
-        // usernameRef.current.value,
-        passwordRef.current.value
-      );
+      await Register(emailRef.current.value, passwordRef.current.value);
 
       console.log(showAlert);
       navigate("/login");
@@ -162,6 +158,10 @@ const Signup = () => {
               <Form.Label>Username</Form.Label>
               <Form.Control type="text" ref={usernameRef} required />
             </Form.Group> */}
+                <Form.Group id="Username" className="mb-4">
+                  <Form.Label>Username</Form.Label>
+                  <Form.Control type="text" ref={usernameRef} required />
+                </Form.Group>
                 <Form.Group id="password" className="mb-4">
                   <Form.Label>Password</Form.Label>
                   <Form.Control type="text" ref={passwordRef} required />
