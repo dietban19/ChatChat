@@ -3,5 +3,13 @@
 }
 
 body {
-  background-color: var(--darker-background);
+  background-color: var(--clr-primary-500);
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background-color: #eee;
 }

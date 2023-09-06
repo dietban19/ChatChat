@@ -5,7 +5,7 @@ import { Container } from "react-bootstrap";
 import { auth, db } from "../../firebase.jsx";
 import { getAdditionalUserInfo } from "firebase/auth";
 import { collection, setDoc, doc } from "firebase/firestore";
-
+import { AiFillGoogleCircle } from "react-icons/ai";
 import {
   createUserWithEmailAndPassword,
   signInWithPopup,
@@ -138,53 +138,75 @@ const Signup = () => {
     }
   }
   return (
-    <>
-      {loading ? (
-        <div>LOADING</div>
-      ) : (
+    <Container
+      className="d-flex align-items-center justify-content-center"
+      style={{ minHeight: "100vh" }}
+    >
+      <div className="load-icon" style={{ maxWidth: "400px" }}>
         <>
-          {" "}
-          <Card>
-            <Card.Body>
-              <h2 className="text-center mb-4">Sign Up</h2>
-
-              {error && <Alert variant="danger">{error}</Alert>}
-              <Form onSubmit={handleSubmit}>
-                <Form.Group id="email">
-                  <Form.Label>Email address</Form.Label>
-                  <Form.Control type="email" ref={emailRef} required />
-                </Form.Group>
-                {/* <Form.Group id="username">
+          {loading ? (
+            <div class="lds-ellipsis align-items-center justify-content-center ">
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
+          ) : (
+            <>
+              {" "}
+              <Card>
+                <Card.Body>
+                  <h2 className="text-center mb-4">Sign Up</h2>
+                  {error && <Alert variant="danger">{error}</Alert>}
+                  <Form onSubmit={handleSubmit}>
+                    <Form.Group id="email">
+                      <Form.Label>Email address</Form.Label>
+                      <Form.Control type="email" ref={emailRef} required />
+                    </Form.Group>
+                    {/* <Form.Group id="username">
               <Form.Label>Username</Form.Label>
               <Form.Control type="text" ref={usernameRef} required />
             </Form.Group> */}
-                <Form.Group id="Username" className="mb-4">
-                  <Form.Label>Username</Form.Label>
-                  <Form.Control type="text" ref={usernameRef} required />
-                </Form.Group>
-                <Form.Group id="password" className="mb-4">
-                  <Form.Label>Password</Form.Label>
-                  <Form.Control type="text" ref={passwordRef} required />
-                </Form.Group>
-                <Form.Group id="passwordConfirom" className="mb-4">
-                  <Form.Label>Confirm Password</Form.Label>
-                  <Form.Control type="text" ref={passwordConfirmRef} required />
-                </Form.Group>
-                <Button className="w-100" type="submit" disabled={loading}>
-                  Sign Up
-                </Button>
-              </Form>
-              <div className="google" onClick={signInWithGoogle}>
-                <GoogleButton />
+                    <Form.Group id="Username" className="mb-4">
+                      <Form.Label>Username</Form.Label>
+                      <Form.Control type="text" ref={usernameRef} required />
+                    </Form.Group>
+                    <Form.Group id="password" className="mb-4">
+                      <Form.Label>Password</Form.Label>
+                      <Form.Control type="text" ref={passwordRef} required />
+                    </Form.Group>
+                    <Form.Group id="passwordConfirom" className="mb-4">
+                      <Form.Label>Confirm Password</Form.Label>
+                      <Form.Control
+                        type="text"
+                        ref={passwordConfirmRef}
+                        required
+                      />
+                    </Form.Group>
+                    <Button className="w-100" type="submit" disabled={loading}>
+                      Sign Up
+                    </Button>
+                  </Form>
+                  <div className="divider d-flex align-items-center my-4">
+                    <p class="text-center fw-bold mx-3 mb-0 text-muted">OR</p>
+                  </div>
+
+                  <div className="google" onClick={signInWithGoogle}>
+                    <div className="googleButton">
+                      <AiFillGoogleCircle size={25} />
+                      <span>Sign In With Google</span>
+                    </div>
+                  </div>
+                </Card.Body>
+              </Card>
+              <div className="w-100 text-center mt-2">
+                Already Have an Account? <Link to="/login">Login </Link>
               </div>
-            </Card.Body>
-          </Card>
-          <div className="w-100 text-center mt-2">
-            Already Have an Account? <Link to="/login">Login </Link>
-          </div>
+            </>
+          )}
         </>
-      )}
-    </>
+      </div>
+    </Container>
   );
 };
 
