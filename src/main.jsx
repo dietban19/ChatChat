@@ -5,7 +5,7 @@ import "./index.css";
 import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext.jsx";
 import { UserProvider } from "./context/userContext.jsx";
-import "bootstrap/dist/css/bootstrap.min.css";
+import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import "./custom-bootstrap.css";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
