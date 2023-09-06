@@ -32,7 +32,7 @@ const home = () => {
       console.log("ITS DONE LOADING", currentUserDB);
       if (!currentUserDB) {
         console.log("go signup");
-        // navigate("/signup");
+        navigate("/signup");
       } else {
         console.log("STAY");
       }
