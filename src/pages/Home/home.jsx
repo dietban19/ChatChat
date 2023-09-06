@@ -37,7 +37,7 @@ const home = () => {
         console.log("STAY");
       }
     }
-  }, [currentUserDB, loadingCurrentUser]);
+  }, []);
 
   async function handleLogOut() {
     setError("");
