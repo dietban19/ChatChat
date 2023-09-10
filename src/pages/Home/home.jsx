@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useUserContext } from "../../context/userContext";
+import { useMessageContext } from "../../context/useMessages.jsx";
 import { db, auth } from "../../firebase";
 import { signOut } from "firebase/auth";
 import { collection, setDoc, doc } from "firebase/firestore";
@@ -9,8 +10,15 @@ import "./home.css";
 const home = () => {
   const [error, setError] = useState("");
   const [loadSignOut, setLoadSignOut] = useState(false);
-  const { currentUserDB, isLoggedIn, loading, loadingCurrentUser } =
-    useUserContext();
+  const { setSelectedMessageID } = useMessageContext();
+  const [selectedMessageId, setSelectedMessageId] = useState("");
+  const {
+    currentUserDB,
+    isLoggedIn,
+    loading,
+    loadingCurrentUser,
+    currentUserGroups,
+  } = useUserContext();
   //   console.log("HOME");
   const navigate = useNavigate();
   const { authCurrentUser } = useAuth();
@@ -54,8 +62,15 @@ const home = () => {
     }
   }
   function goChat() {
-    navigate("/chatroom");
+    console.log(`/chatroom/${selectedMessageId}`);
+    navigate(`/chatroom/${selectedMessageId}`);
   }
+  useEffect(() => {
+    console.log(currentUserGroups);
+    if (currentUserGroups && currentUserGroups.length > 0) {
+      setSelectedMessageId(currentUserGroups[0].id);
+    }
+  }, [currentUserGroups]);
 
   return (
     <>

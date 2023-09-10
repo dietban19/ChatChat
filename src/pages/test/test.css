@@ -1,14 +1,4 @@
-/* .containers {
-  background-color: black;
-
-  border-radius: 4rem;
-
-  padding: 1rem;
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(1, 1fr);
-  height: 100vh;
-}
+/* 
 
 .sidebar {
   border-radius: 3rem;
@@ -59,3 +49,18 @@
 .side4 {
   background-color: purple;
 } */
+
+.side-bar {
+  background-color: red;
+}
+.main-part {
+  background-color: blue;
+}
+.containers {
+  border-radius: 4rem;
+  padding: 1rem;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 100px 1fr;
+  height: 100vh;
+}

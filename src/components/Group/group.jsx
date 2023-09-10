@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { auth, db } from "../../firebase.jsx";
 // import { useAuth } from "../../context/AuthContext.jsx";
 // import { useUserContext } from "../../context/userContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 // const { users } = useUserContext();
 import { useMessageContext } from "../../context/useMessages.jsx";
 import "./group.css";
@@ -35,7 +35,7 @@ export default function group({
   const [filteredUsers, setFilteredUsers] = useState([]);
 
   const navigate = useNavigate();
-
+  const { messageID } = useParams();
   const { newMessage, setSelectedMessageID, selectedMessageID, groupsID } =
     useMessageContext();
   const groupRef = collection(db, "group");
@@ -114,13 +114,14 @@ export default function group({
         setDoc(messageRef, {});
       } else {
       }
-
-      setSelectedMessageID(groupID);
+      console.log("NAVIGATING");
+      navigate(`/chatroom/${groupID}`);
+      // console.log("")
       setShowGroupsPopup(false);
       // navigate("/chatroom");
     }
   }
-  console.log("SECH", searchResults);
+
   return (
     <div className="groupsSearch">
       {/* <button

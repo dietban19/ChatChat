@@ -1,23 +1,14 @@
 import React from "react";
+import { useParams } from "react-router-dom";
 import "./test.css";
 const test = () => {
+  const { id } = useParams();
   return (
     <>
       <div className="bodys">
         <div className="containers">
-          <div className="sidebar">
-            <div className="side1">one</div>
-            <div className="side2">two</div>
-            <div className="side3">three</div>
-            <div className="side4">four</div>
-          </div>
-          <div className="messages">
-            {" "}
-            <div className="side1">one</div>
-            <div className="side2">two</div>
-            <div className="side3">three</div>
-            <div className="side4">four</div>
-          </div>
+          <div className="side-bar">SIDEBAR</div>
+          <div className="main-part">ID: {id}</div>
         </div>
       </div>
     </>
