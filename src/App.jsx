@@ -36,8 +36,8 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/chatroom/:messageID" element={<Chatroom />} />
               <Route path="/chats" element={<Sidebar />} />
-              {/* <Route path="/" element={<Navigate to="/welcome" />} />
-              <Route path="*" element={<Navigate to="/welcome" />} /> */}
+              <Route path="/" element={<Navigate to="/welcome" />} />
+              <Route path="*" element={<Navigate to="/welcome" />} />
             </Routes>
           </>
         )}

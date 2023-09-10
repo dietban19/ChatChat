@@ -1,6 +1,9 @@
 .sidebar {
   background-color: var(--dark-background);
   /* padding: 0.5rem; */
+  /* z-index: 50; */
+  /* position: fixed; */
+  /* z-index: 1; */
   border-right: 1px solid hsla(0, 0%, 71%, 0.284);
   transition: width 200ms ease;
 }
@@ -91,22 +94,32 @@
     display: flex;
     justify-content: center;
   }
-  .userGroupsList li .user-name {
+  .userGroupsList li .user-name,
+  .sidebarHeader__buttons {
     display: none;
-    width: 0;
-    margin-left: 1rem;
-    /* transition: width 10000ms ease; */
+    /* width: 0; */
+    /* margin-left: 1rem; */
+  }
+  .hamburger {
+    /* display: block; */
   }
   .chatWrapper .sidebar {
-    transition: all 200ms ease-in;
-    width: 5rem;
-    position: relative;
+    transition: width 200ms ease;
   }
-  .sidebar:hover {
-    width: 15rem;
+
+  .sidebar.open {
+    width: 20rem;
   }
-  .sidebar:hover .userGroupsList li .user-name {
+  .sidebar.open .sidebarHeader .sidebarHeader__buttons {
+    display: flex;
+    flex-direction: column;
+  }
+  .sidebar.open .userGroupsList li .user-name {
     display: block;
     width: auto;
+  }
+}
+@media (max-width: 460px) {
+  .sidebar:hover {
   }
 }
