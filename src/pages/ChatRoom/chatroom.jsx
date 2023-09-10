@@ -52,6 +52,21 @@ const Chatroom = () => {
   const [showGroupsPopup, setShowGroupsPopup] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   /* Getting Messages */
 
   useEffect(() => {
@@ -151,7 +166,7 @@ const Chatroom = () => {
           const filteredNames = groupMembers.filter(
             (names) => names.username != currentUserDB.username
           );
-
+          console.log("GROUPS ", filteredNames);
           setNamesInGroup(filteredNames);
         }
       }
@@ -204,7 +219,23 @@ const Chatroom = () => {
       {/* {showGroupsPopup && (
 
       )} */}
-
+      {showGroupsPopup && windowWidth <= 768 && (
+        <>
+          <div className="mobile-add-chat-popup">
+            {" "}
+            <AddChat
+              useAuth={useAuth}
+              useUserContext={useUserContext}
+              useMessageContext={useMessageContext}
+              setShowGroupsPopup={setShowGroupsPopup}
+              searchResults={searchResults}
+              searchTerm={searchTerm}
+              setSearchResults={setSearchResults}
+              setSearchTerm={setSearchTerm}
+            />
+          </div>
+        </>
+      )}
       <Sidebar
         setShowSidebar={setShowSidebar}
         showGroupsPopup={showGroupsPopup}
@@ -215,7 +246,7 @@ const Chatroom = () => {
         {namesInGroup.length > 0 ? (
           <>
             <div className="chatRoomHeader">
-              {showGroupsPopup ? (
+              {showGroupsPopup && windowWidth > 768 ? (
                 <>
                   <div className="addChatPopup">
                     <AddChat
@@ -233,19 +264,20 @@ const Chatroom = () => {
               ) : (
                 <div className="selectedChatHeader">
                   {" "}
-                  <button
+                  {/* <button
                     onClick={() => {
                       navigate("/chats");
                     }}
                     className="message-submit-button btn-header"
                   >
                     <AiOutlineArrowLeft size={16} color="white" />
-                  </button>
+                  </button> */}
                   {/* {namesInGroup.length > 0 ? (
                 <> */}
                   {namesInGroup.map((user, index) => (
                     <div className="username" key={index}>
-                      {user.username}
+                      <img src={user.photoURL} />
+                      <span> {user.username}</span>
                     </div>
                   ))}
                   {/* </> */}

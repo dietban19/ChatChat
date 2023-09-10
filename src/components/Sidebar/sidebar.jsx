@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../../context/userContext";
 import { useMessageContext } from "../../context/useMessages";
+import { BsPencilSquare } from "react-icons/bs";
 import { useAuth } from "../../context/AuthContext";
 import Groups from "../Group/group.jsx";
 import "./sidebar.css";
@@ -66,12 +67,13 @@ const sidebar = ({ setShowSidebar, showGroupsPopup, setShowGroupsPopup }) => {
         >
           Groups
         </button>
-        <button onClick={() => setShowGroupsPopup((prevOpen) => !prevOpen)}>
-          {!showGroupsPopup ? (
-            <div className="showGroups">Show</div>
-          ) : (
-            <div className="closeGroups">Close</div>
-          )}
+        <button
+          className="add-group"
+          onClick={() => setShowGroupsPopup((prevOpen) => !prevOpen)}
+        >
+          <div className="showGroups">
+            <BsPencilSquare className="pencil-icon" />
+          </div>
         </button>
       </div>
       <div className="sideBarContents">

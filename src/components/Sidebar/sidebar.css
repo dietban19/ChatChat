@@ -46,3 +46,22 @@
   max-width: 3rem;
   border-radius: 50%;
 }
+.pencil-icon {
+  color: white; /* Change color */
+  font-size: 24px; /* Change size */
+  cursor: pointer; /* Change cursor to pointer on hover */
+  /* margin-right: 10px; Add margin if needed */
+  transition: color 0.3s ease; /* Optional: Smooth color transition */
+}
+
+.add-group {
+  background-color: var(--dark-background-100);
+  border: none;
+  padding: 10px;
+  border-radius: 50%;
+  transition: background-color 0.3s ease; /* Optional: Smooth color transition */
+}
+
+.add-group:hover {
+  background-color: hsl(0, 0%, 37%);
+}
