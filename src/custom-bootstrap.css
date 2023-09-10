@@ -3,7 +3,7 @@
 }
 
 body {
-  background-color: var(--clr-primary-500);
+  background-color: var(--darker-background);
 }
 
 .divider::before,

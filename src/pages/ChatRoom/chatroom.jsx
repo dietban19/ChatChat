@@ -6,7 +6,8 @@ import React, {
   useRef,
 } from "react";
 import { useNavigate } from "react-router-dom";
-import { AiOutlineArrowRight } from "react-icons/ai";
+import { AiOutlineArrowRight, AiOutlineArrowLeft } from "react-icons/ai";
+import AddChat from "../../components/Group/group.jsx";
 import "./chatroom.css";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 
@@ -21,6 +22,7 @@ import {
   limit,
   getDocs,
   onSnapshot,
+  updateDoc,
   setDoc,
   where,
   serverTimestamp,
@@ -38,14 +40,20 @@ const Chatroom = () => {
   //   const myMessages = useMessages();
   const [messagesData, setMessagesData] = useState([]);
   const [allMessages, setAllMessages] = useState([]);
-  const { currentUserDB } = useUserContext();
+  const { currentUserDB, groups, currentUserGroups } = useUserContext();
   //   const {  } = useMessageContext();
-  const { selectedMessageID, groups, scrollRef } = useMessageContext();
+  const { selectedMessageID, scrollRef, setSelectedMessageID } =
+    useMessageContext();
   const [messagesToDisplay, setMessagesToDisplay] = useState([]);
   const [groupToDisplay, setGroupToDisplay] = useState([]);
   const [namesInGroup, setNamesInGroup] = useState([]);
   const [showSidebar, setShowSidebar] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [showGroupsPopup, setShowGroupsPopup] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  /* Getting Messages */
+
   useEffect(() => {
     if (
       currentUserDB &&
@@ -53,7 +61,7 @@ const Chatroom = () => {
       currentUserDB.groups.length > 0
     ) {
       const group = currentUserDB && [...currentUserDB.groups];
-      console.log("GROUPSPGUSPUDGPSUDGPUSDPGUSGD", group);
+
       const unsubscribes = [];
       setAllMessages([]);
       let x = 0;
@@ -87,8 +95,7 @@ const Chatroom = () => {
         unsubscribes.forEach((unsubscribe) => unsubscribe());
       };
     }
-  }, [currentUserDB]);
-  //   console.log("before", selectedMessageID && selectedMessageID);
+  }, [currentUserDB, selectedMessageID]);
 
   const [formValue, setFormValue] = useState("");
 
@@ -98,12 +105,20 @@ const Chatroom = () => {
     if (groupId) {
       // Reference to the 'messages' sub-collection under the specific 'groupId' in 'message' collection
       const messagesRef = collection(doc(db, "message", groupId), "messages");
-      console.log(messagesRef);
       // Add new message to the 'messages' sub-collection
       await addDoc(messagesRef, {
         messageText: formValue,
         sentBy: currentUserDB,
         createdAt: serverTimestamp(),
+      });
+      const newMessageRef = doc(db, "group", groupId);
+      await updateDoc(newMessageRef, {
+        modifiedAt: serverTimestamp(),
+        recentMessage: {
+          messageText: formValue,
+          sentAt: serverTimestamp(),
+          sentBy: currentUserDB.username,
+        },
       });
 
       setFormValue("");
@@ -124,21 +139,19 @@ const Chatroom = () => {
 
   useEffect(() => {
     if (selectedMessageID && allMessages[selectedMessageID]) {
-      console.log("WORKING");
       setMessagesToDisplay(allMessages[selectedMessageID]);
       const selectedGroup = groups.find(
         (item) => item.id === selectedMessageID
       );
       setGroupToDisplay(selectedGroup);
       if (selectedGroup && currentUserDB.username) {
-        console.log("CURRENT NAME", selectedGroup);
         const groupMembers = selectedGroup.members;
-        console.log("GROUPmembers", groupMembers);
+
         if (groupMembers) {
           const filteredNames = groupMembers.filter(
             (names) => names.username != currentUserDB.username
           );
-          console.log(filteredNames);
+
           setNamesInGroup(filteredNames);
         }
       }
@@ -150,69 +163,97 @@ const Chatroom = () => {
 
   /* Save Names In group */
 
-  useEffect(() => {
-    console.log("NAMES");
-    if (namesInGroup.length > 0) {
-      console.log("IT GREW");
-      setLoading(false);
-    } else {
-      console.log("fds");
-      //   navigate()
-    }
-  }, [namesInGroup]);
+  // useEffect(() => {
+  //   if (namesInGroup.length > 0) {
+  //     console.log("IT GREW");
+  //     setLoading(false);
+  //   } else {
+  //     //   navigate()
+  //   }
+  // }, [namesInGroup]);
 
-  useEffect(() => {
-    console.log("load");
-    if (!loading) {
-      console.log("done loading");
-      if (namesInGroup.length <= 0) {
-        console.log("BAD");
-      } else {
-        console.log("GOOD");
-      }
-    }
-  }, [loading, namesInGroup]);
+  // useEffect(() => {
+  //   if (!loading) {
+  //     console.log("done loading");
+  //     if (namesInGroup.length <= 0) {
+  //       console.log("BAD");
+  //     } else {
+  //       console.log("GOOD");
+  //     }
+  //   }
+  // }, [loading, namesInGroup]);
 
   // Existing logic and JSX...
-  console.log(namesInGroup);
+
   /* Check if there is a new message, scroll if true*/
   useEffect(() => {
     if (scrollRef.current) {
-      console.log("new Message");
       scrollRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [messagesToDisplay]);
-
+  useEffect(() => {
+    console.log("SDFSDFSDFasdf");
+    console.log("1214fasdf", currentUserGroups);
+    if (currentUserGroups && currentUserGroups.length > 0) {
+      setSelectedMessageID(currentUserGroups[0].id);
+    }
+  }, [currentUserGroups]);
   return (
     <div className="chatWrapper">
       {/* {showSidebar && <Sidebar setShowSidebar={setShowSidebar} />} */}
+      {/* {showGroupsPopup && (
+
+      )} */}
+
+      <Sidebar
+        setShowSidebar={setShowSidebar}
+        showGroupsPopup={showGroupsPopup}
+        setShowGroupsPopup={setShowGroupsPopup}
+      />
+
       <div className="chatRoomContainer">
         {namesInGroup.length > 0 ? (
           <>
             <div className="chatRoomHeader">
-              {namesInGroup.length > 0 ? (
+              {showGroupsPopup ? (
                 <>
-                  {namesInGroup.map((user, index) => (
-                    <div key={index}>{user.username}</div>
-                  ))}
+                  <div className="addChatPopup">
+                    <AddChat
+                      useAuth={useAuth}
+                      useUserContext={useUserContext}
+                      useMessageContext={useMessageContext}
+                      setShowGroupsPopup={setShowGroupsPopup}
+                      searchResults={searchResults}
+                      searchTerm={searchTerm}
+                      setSearchResults={setSearchResults}
+                      setSearchTerm={setSearchTerm}
+                    />
+                  </div>
                 </>
               ) : (
+                <div className="selectedChatHeader">
+                  {" "}
+                  <button
+                    onClick={() => {
+                      navigate("/chats");
+                    }}
+                    className="message-submit-button btn-header"
+                  >
+                    <AiOutlineArrowLeft size={16} color="white" />
+                  </button>
+                  {/* {namesInGroup.length > 0 ? (
+                <> */}
+                  {namesInGroup.map((user, index) => (
+                    <div className="username" key={index}>
+                      {user.username}
+                    </div>
+                  ))}
+                  {/* </> */}
+                  {/* ) : (
                 "No names in group"
+              )} */}
+                </div>
               )}
-              <button
-                onClick={() => {
-                  setShowSidebar(!showSidebar);
-                }}
-              >
-                SHOW
-              </button>
-              <button
-                onClick={() => {
-                  navigate("/chats");
-                }}
-              >
-                Back
-              </button>
             </div>
             <div className="chatRoomMessages">
               {messagesToDisplay.map((msg, index) => (
@@ -239,7 +280,7 @@ const Chatroom = () => {
             </form>
           </>
         ) : (
-          <div>WALA</div>
+          <div></div>
         )}
       </div>
       {/* <button onClick={sendM}>SE</button> */}

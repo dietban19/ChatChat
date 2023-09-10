@@ -4,6 +4,7 @@
   --message-green: hsl(145, 63%, 45%);
   --message-grey: hsl(240, 2%, 24%);
   --gray: hsl(220, 2%, 24%);
+  --dark-background-100: hsl(216, 4%, 25%);
   --dark-background: hsl(220, 7%, 18%);
   --darker-background: hsl(223, 7%, 21%);
 
@@ -13,6 +14,8 @@
   --clr-secondary-400: hsl(39, 100%, 74%);
   --clr-secondary-500: hsl(40, 98%, 60%);
   --clr-secondary-600: hsl(37, 84%, 38%);
+
+  --fc-secondary: hsl(0, 0%, 62%);
 }
 *,
 *::before,

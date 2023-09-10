@@ -25,9 +25,7 @@ const Signup = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    console.log("CURRENT", loadingCurrentUser);
     if (!loadingCurrentUser) {
-      console.log("CURRENT USER", currentUserDB);
       if (currentUserDB) {
         console.log("go home");
         // navigate("/home");
@@ -35,7 +33,6 @@ const Signup = () => {
     }
   }, [currentUserDB, loadingCurrentUser]);
   async function addNewUser(result) {
-    console.log("step 3");
     console.log(result);
     const addUserData = {
       username: result.user.email.split("@")[0],
@@ -49,23 +46,21 @@ const Signup = () => {
     await setDoc(userDocRef, addUserData);
   }
   async function googleSignIn() {
-    console.log("STEP 2");
     try {
       const result = await signInWithPopup(auth, provider);
-      console.log("GOOD");
+
       // This gives you a Google Access Token. You can use it to access the Google API.
 
       // console.log(result);
       const credential = GoogleAuthProvider.credentialFromResult(result);
       const token = credential.accessToken;
       const userData = getAdditionalUserInfo(result);
-      console.log(userData);
+
       // make new instance in user collection if the user is new user
 
       if (userData.isNewUser) {
         addNewUser(result);
       }
-      console.log("step 4");
       navigate("/home");
     } catch {
       (error) => {
@@ -145,7 +140,7 @@ const Signup = () => {
       <div className="load-icon" style={{ maxWidth: "400px" }}>
         <>
           {loading ? (
-            <div class="lds-ellipsis align-items-center justify-content-center ">
+            <div className="lds-ellipsis align-items-center justify-content-center ">
               <div></div>
               <div></div>
               <div></div>
@@ -188,7 +183,9 @@ const Signup = () => {
                     </Button>
                   </Form>
                   <div className="divider d-flex align-items-center my-4">
-                    <p class="text-center fw-bold mx-3 mb-0 text-muted">OR</p>
+                    <p className="text-center fw-bold mx-3 mb-0 text-muted">
+                      OR
+                    </p>
                   </div>
 
                   <div className="google" onClick={signInWithGoogle}>

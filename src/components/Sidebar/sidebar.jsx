@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../../context/userContext";
 import { useMessageContext } from "../../context/useMessages";
 import { useAuth } from "../../context/AuthContext";
 import Groups from "../Group/group.jsx";
 import "./sidebar.css";
-const sidebar = ({ setShowSidebar }) => {
-  const { users } = useUserContext();
-  const [showGroupsPopup, setShowGroupsPopup] = useState(false);
+const sidebar = ({ setShowSidebar, showGroupsPopup, setShowGroupsPopup }) => {
+  const { users, currentUserGroups, currentUserDB, groups } = useUserContext();
+  const { setSelectedMessageID, selectedMessageID } = useMessageContext();
+  const [userGroups, setUserGroups] = useState([]);
+
   const navigate = useNavigate();
   const userss = [
     { id: 1, name: "User 1" },
@@ -19,8 +21,34 @@ const sidebar = ({ setShowSidebar }) => {
   function handleProfile() {
     navigate("/home");
   }
-  // console.log(users);
+  // console.log(currentUserGroups);
+  useEffect(() => {
+    // console.log(currentUserGroups);
+    console.log("SDFSDF");
+    console.log(currentUserGroups);
+    if (currentUserGroups.length > 0) {
+      const result = currentUserGroups.map((user) => {
+        const filteredMembers = user.members.filter(
+          (member) => member.username !== currentUserDB.username
+        );
+        return {
+          id: user.id,
+          members: filteredMembers.map((member) => member.username),
+          profileImage: filteredMembers.map((member) => member.photoURL),
+        };
+      });
+      console.log("RESULT", result);
+      setUserGroups(result);
+    }
+  }, [currentUserGroups]);
 
+  function ChooseChat(props) {
+    // console.log(props);
+    const { id } = props.group;
+    setShowGroupsPopup(false);
+    // console.log(id);
+    setSelectedMessageID(id);
+  }
   return (
     <div className="sidebar">
       {/* <ul className="user-list">
@@ -28,21 +56,40 @@ const sidebar = ({ setShowSidebar }) => {
           <li key={user.id}>{user.username}</li>
         ))}
       </ul> */}
-      <button onClick={handleProfile}>Profile</button>
-      <button onClick={() => setShowGroupsPopup((prevOpen) => !prevOpen)}>
-        {!showGroupsPopup ? (
-          <div className="showGroups">Show</div>
-        ) : (
-          <div className="closeGroups">Close</div>
-        )}
-      </button>
-      {showGroupsPopup && (
-        <Groups
-          useAuth={useAuth}
-          useUserContext={useUserContext}
-          useMessageContext={useMessageContext}
-        />
-      )}
+      <div className="sidebarHeader">
+        {" "}
+        <button onClick={handleProfile}>Profile</button>
+        <button
+          onClick={() => {
+            console.log(currentUserGroups);
+          }}
+        >
+          Groups
+        </button>
+        <button onClick={() => setShowGroupsPopup((prevOpen) => !prevOpen)}>
+          {!showGroupsPopup ? (
+            <div className="showGroups">Show</div>
+          ) : (
+            <div className="closeGroups">Close</div>
+          )}
+        </button>
+      </div>
+      <div className="sideBarContents">
+        <ul className="userGroupsList">
+          {userGroups &&
+            userGroups.map((group, index) => (
+              <li
+                key={index}
+                onClick={() => {
+                  ChooseChat({ group });
+                }}
+              >
+                <img src={group.profileImage} />
+                <span> {group.members}</span>
+              </li>
+            ))}
+        </ul>
+      </div>
     </div>
   );
 };
