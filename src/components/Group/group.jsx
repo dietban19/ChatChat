@@ -132,7 +132,12 @@ export default function group({
         Close
       </button> */}
       <div className="mobileHeader">
-        <div className="cancelButton">Cancel</div>
+        <div
+          onClick={() => setShowGroupsPopup((prevOpen) => !prevOpen)}
+          className="cancelButton"
+        >
+          Cancel
+        </div>
         <span>New Message</span>
       </div>
       <div className="searchInput">

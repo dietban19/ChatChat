@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../../context/userContext";
 import { useMessageContext } from "../../context/useMessages";
 import { BsPencilSquare } from "react-icons/bs";
+import { GiHamburgerMenu } from "react-icons/gi";
 import { CgProfile } from "react-icons/cg";
 import { useAuth } from "../../context/AuthContext";
 import Groups from "../Group/group.jsx";
@@ -11,6 +12,7 @@ const sidebar = ({ setShowSidebar, showGroupsPopup, setShowGroupsPopup }) => {
   const { users, currentUserGroups, currentUserDB, groups } = useUserContext();
   const { setSelectedMessageID, selectedMessageID } = useMessageContext();
   const [userGroups, setUserGroups] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
 
   const navigate = useNavigate();
   const userss = [
@@ -52,8 +54,9 @@ const sidebar = ({ setShowSidebar, showGroupsPopup, setShowGroupsPopup }) => {
     // setSelectedMessageID(id);
     navigate(`/chatroom/${id}`);
   }
+  function handleOpenSidebar() {}
   return (
-    <div className="sidebar">
+    <div className={`sidebar ${isOpen ? "open" : ""}`}>
       {/* <ul className="user-list">
         {users.map((user) => (
           <li key={user.id}>{user.username}</li>
@@ -61,13 +64,24 @@ const sidebar = ({ setShowSidebar, showGroupsPopup, setShowGroupsPopup }) => {
       </ul> */}
       <div className="sidebarHeader">
         <span> Chats</span>
+        <button
+          className="sidebarHeader__button hamburger"
+          onClick={() => {
+            setIsOpen(!isOpen);
+          }}
+        >
+          <GiHamburgerMenu className="icon" />
+        </button>
         <div className="sidebarHeader__buttons">
           {" "}
-          <button className="sidebarHeader__button" onClick={handleProfile}>
+          <button
+            className="sidebarHeader__button profile-btn"
+            onClick={handleProfile}
+          >
             <CgProfile className="icon" />
           </button>
           <button
-            className="sidebarHeader__button"
+            className="sidebarHeader__button addUser"
             onClick={() => setShowGroupsPopup((prevOpen) => !prevOpen)}
           >
             <div className="showGroups">
