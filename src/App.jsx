@@ -12,6 +12,7 @@ import Login from "./pages/Login/login.jsx";
 import Chatroom from "./pages/ChatRoom/chatroom.jsx";
 import Sidebar from "./components/Sidebar/sidebar.jsx";
 import Welcome from "./pages/Welcome/welcome.jsx";
+import Test from "./pages/test/test.jsx";
 function App() {
   // const { user, currentUser } = useAuth();
   const { isLoggedIn, currentUserDB, loading, loadingCurrentUser } =
@@ -29,6 +30,7 @@ function App() {
           <>
             <Routes>
               <Route path="/home" element={<Home />} />
+              <Route path="/test" element={<Test />} />
               <Route path="/welcome" element={<Welcome />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/login" element={<Login />} />

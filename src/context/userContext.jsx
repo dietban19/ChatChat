@@ -26,17 +26,20 @@ export function UserProvider({ children }) {
   const userRef = collection(db, "users");
   const [currentUserDB, setCurrentUserDB] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [currentUserGroups, setCurrentUserGroups] = useState([]);
+  const [groups, setGroups] = useState([]);
 
   const userQuery = query(userRef);
   async function getUsers() {}
+
   useEffect(() => {
+    console.log("getting all users");
     onSnapshot(userQuery, (querySnapshot) => {
       const users = [];
       querySnapshot.forEach((doc) => {
         users.push(doc.data());
       });
       setUsers(users);
-      // console.log(users);
       setLoading(false);
     });
   }, []);
@@ -45,10 +48,25 @@ export function UserProvider({ children }) {
 
     return findUser;
   };
-
+  /* getting all GROUP */
   useEffect(() => {
-    // getUsers();
-    // console.log("true");
+    console.log("getting Groups");
+    const readGroupQuery = query(
+      collection(db, "group"),
+      orderBy("modifiedAt", "desc")
+    );
+    onSnapshot(readGroupQuery, (querySnapshot) => {
+      const messages = [];
+      querySnapshot.forEach((doc) => {
+        messages.push({ ...doc.data(), id: doc.id });
+      });
+      const ids = messages.map((item) => item.id);
+      // console.log(messages);
+      setGroups(messages);
+      // setGroupsID(ids);
+    });
+  }, []);
+  useEffect(() => {
     if (authCurrentUser && authCurrentUser.uid && users.length > 0) {
       const currentUser = getDatabaseInfo(authCurrentUser.uid);
 
@@ -59,9 +77,17 @@ export function UserProvider({ children }) {
         setLoadingCurrentUser(false);
       }
     } else {
-      // console.log("NOTRUNNING");
     }
   }, [authCurrentUser, users]);
+  useEffect(() => {
+    if (currentUserDB && groups) {
+      const userGroups = groups.filter((group) =>
+        currentUserDB.groups.includes(group.id)
+      );
+      console.log(userGroups);
+      setCurrentUserGroups(userGroups);
+    }
+  }, [currentUserDB, groups]);
   const userValues = {
     userRef,
     users,
@@ -69,6 +95,8 @@ export function UserProvider({ children }) {
     isLoggedIn,
     loading,
     loadingCurrentUser,
+    currentUserGroups,
+    groups,
     setLoading,
   };
   return (

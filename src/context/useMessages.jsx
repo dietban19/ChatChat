@@ -31,10 +31,11 @@ export function MessageProvider({ children }) {
   const [groups, setGroups] = useState([]);
   const [groupsID, setGroupsID] = useState([]);
   const scrollRef = useRef();
+
+  /* Message Getter */
   useEffect(() => {
-    console.log("Setting up Firestore subscription");
+    console.log("Getting Message");
     onSnapshot(myQuery, (querySnapshot) => {
-      // console.log(querySnapshot.docs.map((doc) => doc.data()));
       const messages = [];
       querySnapshot.forEach((doc) => {
         messages.push({ ...doc.data(), id: doc.id });
@@ -44,12 +45,11 @@ export function MessageProvider({ children }) {
     });
   }, []);
 
-  /* Creating NEW GROUP */
+  /* getting all GROUP */
   useEffect(() => {
+    console.log("getting Groups");
     const readGroupQuery = query(collection(db, "group"));
-    //   console.log("Setting up Firestore subscription");
     onSnapshot(readGroupQuery, (querySnapshot) => {
-      // console.log(querySnapshot.docs.map((doc) => doc.data()));
       const messages = [];
       querySnapshot.forEach((doc) => {
         messages.push({ ...doc.data(), id: doc.id });
@@ -60,7 +60,6 @@ export function MessageProvider({ children }) {
     });
   }, []);
   const [formValue, setFormValue] = useState("");
-  // const [photo_URL, setPhoto_URL] = useState("");
   const newMessageRef = async ({ uid }) => {
     console.log(uid);
     console.log(photoURL);
@@ -73,8 +72,7 @@ export function MessageProvider({ children }) {
   };
 
   const newMessage = async ({ groupID }) => {
-    console.log(groupID);
-    console.log("NEW MESSAGE");
+    console.log("Creating NEW MESSAGE");
     const groupMessageRef = doc(db, "message", groupID);
     const messagesRef = collection(groupMessageRef, "messages");
     addDoc(messagesRef, {});

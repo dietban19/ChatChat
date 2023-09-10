@@ -1,14 +1,17 @@
 .chatWrapper {
-  height: 95vh;
-  display: flex;
+  height: 100vh;
+  display: grid;
+  /* background-color: red; */
+  grid-template-columns: 1fr 4fr;
 }
 .chatWrapper > :nth-child(1) {
-  flex: 1;
-  padding: 0.5rem;
+  /* flex: 1; */
+  /* width: 15%; */
+  /* padding: 0.5rem; */
 }
 .chatWrapper > :nth-child(2) {
   /* padding: 0.75rem; */
-  flex: 2;
+  /* flex: 2; */
 }
 
 /* MESSAGES */
@@ -63,16 +66,22 @@
 .chatRoomContainer {
   display: flex;
   flex-direction: column;
-  width: 70%;
+  /* width: 70%; */
   height: 100vh;
   border-left: 1px solid #ccc;
   border-right: 1px solid #ccc;
 }
 
 .chatRoomHeader {
+  display: flex;
   flex: 0 0 auto;
-  background-color: var(--gray);
+  height: 5rem;
+  background-color: var(--dark-background);
+  flex-direction: row !important;
+  /* justify-content: center; */
+  padding: 1rem;
 }
+
 .chatRoomMessages {
   flex: 1 1 auto;
   overflow-y: scroll;
@@ -81,7 +90,8 @@
 }
 .message-form {
   /* background-color: red; */
-  padding: 0.25rem;
+  background-color: var(--dark-background);
+  padding: 0.5rem;
 }
 
 .message-submit-button {
@@ -90,7 +100,7 @@
 .inputContainer {
   /* background-color: green; */
   background-color: white;
-  width: 90%;
+  width: 100%;
   border-radius: 3rem;
   display: flex;
   justify-content: space-between;
@@ -116,6 +126,11 @@
   border: none; /* Remove border */
   cursor: pointer; /* Pointer cursor on hover */
 }
+.btn-header {
+  background-color: red;
+  width: 3rem;
+  height: 3rem;
+}
 
 @media (max-width: 600px) {
   .name {
@@ -137,4 +152,33 @@
     justify-content: space-between;
     padding: 0.25rem 0.5rem;
   }
+}
+
+.addChatPopup {
+  /* position: absolute; */
+  /* top: 5rem; */
+  /* background-color: red; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.selectedChatHeader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 0 0 auto;
+  /* background-color: red; */
+  width: 100%;
+}
+.backButton {
+  flex: 0 0 auto;
+}
+.username {
+  flex: 0 0 auto;
+  margin: 0 auto;
+  color: white;
+  font-weight: 500;
+  font-size: 1.5rem;
 }

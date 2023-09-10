@@ -10,9 +10,39 @@
   margin-bottom: 1rem;
 }
 .user-list li {
-  background-color: green;
   margin: 0;
   padding: 0;
   margin-bottom: 1rem;
   padding: 1rem;
+}
+
+.sidebarHeader {
+  border-bottom: 2px solid white;
+}
+.userGroupsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  margin-bottom: 1rem;
+}
+
+.userGroupsList li {
+  /* background-color: rgb(53, 99, 140); */
+  color: var(--fc-secondary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  margin-bottom: 1rem;
+  padding: 1rem;
+}
+.userGroupsList :hover {
+  background-color: rgb(35, 35, 35);
+  cursor: pointer;
+}
+
+.userGroupsList img {
+  max-width: 3rem;
+  border-radius: 50%;
 }
