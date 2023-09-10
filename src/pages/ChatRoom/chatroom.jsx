@@ -148,7 +148,7 @@ const Chatroom = () => {
 
   const sendMessage = async (e) => {
     e.preventDefault();
-    console.log("SENIND");
+
     newMessageRef();
   };
 
@@ -166,7 +166,7 @@ const Chatroom = () => {
           const filteredNames = groupMembers.filter(
             (names) => names.username != currentUserDB.username
           );
-          console.log("GROUPS ", filteredNames);
+
           setNamesInGroup(filteredNames);
         }
       }
@@ -207,8 +207,6 @@ const Chatroom = () => {
     }
   }, [messagesToDisplay]);
   useEffect(() => {
-    console.log("SDFSDFSDFasdf");
-    console.log("1214fasdf", currentUserGroups);
     if (currentUserGroups && currentUserGroups.length > 0) {
       setSelectedMessageID(currentUserGroups[0].id);
     }
