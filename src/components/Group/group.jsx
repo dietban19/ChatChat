@@ -116,10 +116,11 @@ export default function group({
       }
 
       setSelectedMessageID(groupID);
-      navigate("/chatroom");
+      setShowGroupsPopup(false);
+      // navigate("/chatroom");
     }
   }
-
+  console.log("SECH", searchResults);
   return (
     <div className="groupsSearch">
       {/* <button
@@ -129,20 +130,29 @@ export default function group({
       >
         Close
       </button> */}
-      <span>To: </span>
-      <input
-        type="text"
-        placeholder="Search for a new friend..."
-        value={searchTerm}
-        onChange={handleSearchChange}
-      />
-      <button onClick={searchUsers}>Search</button>
+      <div className="mobileHeader">
+        <div className="cancelButton">Cancel</div>
+        <span>New Message</span>
+      </div>
+      <div className="searchInput">
+        {" "}
+        <span>To: </span>
+        <input
+          type="text"
+          placeholder="Search for a new friend..."
+          value={searchTerm}
+          onChange={handleSearchChange}
+        />
+        {/* <button onClick={searchUsers}>Search</button> */}
+      </div>
+
       <div className="groupPopup">
         <h2>Choose a user</h2>
         <ul className="groupsPopup__user-list">
           {searchResults.map((user) => (
             <li key={user.id} onClick={() => chooseUser({ user })}>
-              {user.username}
+              <img src={user.photoURL} />
+              <span> {user.username}</span>
             </li>
           ))}
         </ul>
