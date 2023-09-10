@@ -30,14 +30,14 @@ function App() {
           <>
             <Routes>
               <Route path="/home" element={<Home />} />
-              <Route path="/test" element={<Test />} />
+              <Route path="/test/:id" element={<Test />} />
               <Route path="/welcome" element={<Welcome />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/login" element={<Login />} />
-              <Route path="/chatroom" element={<Chatroom />} />
+              <Route path="/chatroom/:messageID" element={<Chatroom />} />
               <Route path="/chats" element={<Sidebar />} />
-              <Route path="/" element={<Navigate to="/welcome" />} />
-              <Route path="*" element={<Navigate to="/welcome" />} />
+              {/* <Route path="/" element={<Navigate to="/welcome" />} />
+              <Route path="*" element={<Navigate to="/welcome" />} /> */}
             </Routes>
           </>
         )}

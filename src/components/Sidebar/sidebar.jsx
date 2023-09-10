@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../../context/userContext";
 import { useMessageContext } from "../../context/useMessages";
 import { BsPencilSquare } from "react-icons/bs";
+import { CgProfile } from "react-icons/cg";
 import { useAuth } from "../../context/AuthContext";
 import Groups from "../Group/group.jsx";
 import "./sidebar.css";
@@ -48,7 +49,8 @@ const sidebar = ({ setShowSidebar, showGroupsPopup, setShowGroupsPopup }) => {
     const { id } = props.group;
     setShowGroupsPopup(false);
     // console.log(id);
-    setSelectedMessageID(id);
+    // setSelectedMessageID(id);
+    navigate(`/chatroom/${id}`);
   }
   return (
     <div className="sidebar">
@@ -58,23 +60,21 @@ const sidebar = ({ setShowSidebar, showGroupsPopup, setShowGroupsPopup }) => {
         ))}
       </ul> */}
       <div className="sidebarHeader">
-        {" "}
-        <button onClick={handleProfile}>Profile</button>
-        <button
-          onClick={() => {
-            console.log(currentUserGroups);
-          }}
-        >
-          Groups
-        </button>
-        <button
-          className="add-group"
-          onClick={() => setShowGroupsPopup((prevOpen) => !prevOpen)}
-        >
-          <div className="showGroups">
-            <BsPencilSquare className="pencil-icon" />
-          </div>
-        </button>
+        <span> Chats</span>
+        <div className="sidebarHeader__buttons">
+          {" "}
+          <button className="sidebarHeader__button" onClick={handleProfile}>
+            <CgProfile className="icon" />
+          </button>
+          <button
+            className="sidebarHeader__button"
+            onClick={() => setShowGroupsPopup((prevOpen) => !prevOpen)}
+          >
+            <div className="showGroups">
+              <BsPencilSquare className="icon" />
+            </div>
+          </button>
+        </div>
       </div>
       <div className="sideBarContents">
         <ul className="userGroupsList">
@@ -87,7 +87,7 @@ const sidebar = ({ setShowSidebar, showGroupsPopup, setShowGroupsPopup }) => {
                 }}
               >
                 <img src={group.profileImage} />
-                <span> {group.members}</span>
+                <span className="user-name"> {group.members}</span>
               </li>
             ))}
         </ul>

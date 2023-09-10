@@ -68,8 +68,8 @@
   flex-direction: column;
   /* width: 70%; */
   height: 100vh;
-  border-left: 1px solid #ccc;
-  border-right: 1px solid #ccc;
+  /* border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc; */
 }
 
 .chatRoomHeader {
@@ -90,7 +90,7 @@
 }
 .message-form {
   /* background-color: red; */
-  background-color: var(--dark-background);
+  background-color: var(--darker-background-900);
   padding: 0.5rem;
 }
 
@@ -99,7 +99,7 @@
 
 .inputContainer {
   /* background-color: green; */
-  background-color: white;
+  background-color: var(--dark-background);
   width: 100%;
   border-radius: 3rem;
   display: flex;
@@ -110,6 +110,7 @@
 .inputContainer input[type="text"] {
   background-color: transparent;
   /* background-color: green; */
+  color: var(--fc-primary);
   outline: none;
   border: none;
   width: 100%;
@@ -199,5 +200,23 @@
     height: 95%;
     border-radius: 1rem 1rem 0 0;
     /* padding: 0.5rem; */
+  }
+}
+
+@media (max-width: 600px) {
+  .username {
+    gap: 1rem;
+  }
+  .username img {
+    max-width: 2.75rem;
+  }
+  .username span {
+    font-size: 1.15rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .username span {
+    /* font-size: 1rem; */
   }
 }

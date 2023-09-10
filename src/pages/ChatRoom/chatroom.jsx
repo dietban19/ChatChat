@@ -5,7 +5,7 @@ import React, {
   Fragment,
   useRef,
 } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { AiOutlineArrowRight, AiOutlineArrowLeft } from "react-icons/ai";
 import AddChat from "../../components/Group/group.jsx";
 import "./chatroom.css";
@@ -42,8 +42,7 @@ const Chatroom = () => {
   const [allMessages, setAllMessages] = useState([]);
   const { currentUserDB, groups, currentUserGroups } = useUserContext();
   //   const {  } = useMessageContext();
-  const { selectedMessageID, scrollRef, setSelectedMessageID } =
-    useMessageContext();
+  const { scrollRef } = useMessageContext();
   const [messagesToDisplay, setMessagesToDisplay] = useState([]);
   const [groupToDisplay, setGroupToDisplay] = useState([]);
   const [namesInGroup, setNamesInGroup] = useState([]);
@@ -54,6 +53,7 @@ const Chatroom = () => {
   const [searchResults, setSearchResults] = useState([]);
 
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const { messageID } = useParams();
 
   useEffect(() => {
     const handleResize = () => {
@@ -110,14 +110,15 @@ const Chatroom = () => {
         unsubscribes.forEach((unsubscribe) => unsubscribe());
       };
     }
-  }, [currentUserDB, selectedMessageID]);
+  }, [currentUserDB, messageID]);
 
   const [formValue, setFormValue] = useState("");
 
   const newMessageRef = async () => {
-    const groupId = selectedMessageID; // Make sure selectedMessageID is not null or undefined
+    const groupId = messageID; // Make sure messageID is not null or undefined
 
-    if (groupId) {
+    //HERE
+    if (messageID) {
       // Reference to the 'messages' sub-collection under the specific 'groupId' in 'message' collection
       const messagesRef = collection(doc(db, "message", groupId), "messages");
       // Add new message to the 'messages' sub-collection
@@ -153,11 +154,9 @@ const Chatroom = () => {
   };
 
   useEffect(() => {
-    if (selectedMessageID && allMessages[selectedMessageID]) {
-      setMessagesToDisplay(allMessages[selectedMessageID]);
-      const selectedGroup = groups.find(
-        (item) => item.id === selectedMessageID
-      );
+    if (allMessages[messageID]) {
+      setMessagesToDisplay(allMessages[messageID]);
+      const selectedGroup = groups.find((item) => item.id === messageID);
       setGroupToDisplay(selectedGroup);
       if (selectedGroup && currentUserDB.username) {
         const groupMembers = selectedGroup.members;
@@ -174,31 +173,7 @@ const Chatroom = () => {
       setMessagesToDisplay([]);
       setGroupToDisplay([]);
     }
-  }, [selectedMessageID, allMessages]);
-
-  /* Save Names In group */
-
-  // useEffect(() => {
-  //   if (namesInGroup.length > 0) {
-  //     console.log("IT GREW");
-  //     setLoading(false);
-  //   } else {
-  //     //   navigate()
-  //   }
-  // }, [namesInGroup]);
-
-  // useEffect(() => {
-  //   if (!loading) {
-  //     console.log("done loading");
-  //     if (namesInGroup.length <= 0) {
-  //       console.log("BAD");
-  //     } else {
-  //       console.log("GOOD");
-  //     }
-  //   }
-  // }, [loading, namesInGroup]);
-
-  // Existing logic and JSX...
+  }, [messageID, allMessages]);
 
   /* Check if there is a new message, scroll if true*/
   useEffect(() => {
@@ -206,17 +181,9 @@ const Chatroom = () => {
       scrollRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [messagesToDisplay]);
-  useEffect(() => {
-    if (currentUserGroups && currentUserGroups.length > 0) {
-      setSelectedMessageID(currentUserGroups[0].id);
-    }
-  }, [currentUserGroups]);
+
   return (
     <div className="chatWrapper">
-      {/* {showSidebar && <Sidebar setShowSidebar={setShowSidebar} />} */}
-      {/* {showGroupsPopup && (
-
-      )} */}
       {showGroupsPopup && windowWidth <= 768 && (
         <>
           <div className="mobile-add-chat-popup">
@@ -301,7 +268,7 @@ const Chatroom = () => {
                   type="text"
                   value={formValue}
                   onChange={(e) => setFormValue(e.target.value)}
-                  placeholder="Type your message..."
+                  placeholder="Aa"
                 />
                 <button type="submit" className="message-submit-button">
                   <AiOutlineArrowRight size={16} color="white" />
