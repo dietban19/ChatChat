@@ -1,9 +1,5 @@
 .sidebar {
   background-color: var(--dark-background);
-  /* padding: 0.5rem; */
-  /* z-index: 50; */
-  /* position: fixed; */
-  /* z-index: 1; */
   border-right: 1px solid hsla(0, 0%, 71%, 0.284);
   transition: width 200ms ease;
   overflow-y: auto; /* Enable vertical scrollbar if content overflows */
