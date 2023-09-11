@@ -35,13 +35,16 @@ const sidebar = ({ setShowSidebar, showGroupsPopup, setShowGroupsPopup }) => {
         const filteredMembers = user.members.filter(
           (member) => member.username !== currentUserDB.username
         );
+
         return {
           id: user.id,
           members: filteredMembers.map((member) => member.username),
           profileImage: filteredMembers.map((member) => member.photoURL),
+          modifiedAt: user.modifiedAt,
+          recentMessage: user.recentMessage.messageText,
         };
       });
-      console.log("RESULT", result);
+
       setUserGroups(result);
     }
   }, [currentUserGroups]);
@@ -55,6 +58,7 @@ const sidebar = ({ setShowSidebar, showGroupsPopup, setShowGroupsPopup }) => {
     navigate(`/chatroom/${id}`);
   }
   function handleOpenSidebar() {}
+
   return (
     <div className={`sidebar ${isOpen ? "open" : ""}`}>
       {/* <ul className="user-list">
@@ -101,7 +105,10 @@ const sidebar = ({ setShowSidebar, showGroupsPopup, setShowGroupsPopup }) => {
                 }}
               >
                 <img src={group.profileImage} />
-                <span className="user-name"> {group.members}</span>
+                <div className="textRight">
+                  <span className="user-name"> {group.members}</span>
+                  <div className="recentText">{group.recentMessage}</div>
+                </div>
               </li>
             ))}
         </ul>
