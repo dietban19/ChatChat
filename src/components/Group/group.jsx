@@ -30,13 +30,13 @@ export default function group({
   setSearchTerm,
   setSearchResults,
 }) {
-  const { users, currentUserDB } = useUserContext();
+  const { users, currentUserDB, groupsID } = useUserContext();
 
   const [filteredUsers, setFilteredUsers] = useState([]);
 
   const navigate = useNavigate();
   const { messageID } = useParams();
-  const { newMessage, setSelectedMessageID, selectedMessageID, groupsID } =
+  const { newMessage, setSelectedMessageID, selectedMessageID } =
     useMessageContext();
   const groupRef = collection(db, "group");
   function createNewGroupID({ otherPersonID, myId }) {
@@ -80,7 +80,6 @@ export default function group({
   };
   async function chooseUser({ user }) {
     if (!currentUserDB || !user) {
-      console.log("NOTET");
       return;
     } else if (user && currentUserDB) {
       const groupID = createNewGroupID({
@@ -93,11 +92,20 @@ export default function group({
         createdBy: currentUserDB.id,
         id: groupID,
         members: [user, currentUserDB],
+        modifiedAt: serverTimestamp(),
+        recentMessage: {
+          messageText: "",
+          sentAt: "",
+          sentBy: "",
+        },
       };
-
+      console.log(1, groupID);
+      console.log(2, groupsID);
+      console.log(newGroupData);
       // check if group exists
-      if (!groupsID.includes(groupID)) {
-        console.log("MAKONG A NEW ONE");
+      console.log(!groupsID.includes(groupID));
+      if (groupsID && !groupsID.includes(groupID)) {
+        console.log("MAKING NEW ONE");
         const groupDocRef = doc(db, "group", groupID);
         //make the new group
         setDoc(groupDocRef, newGroupData);
@@ -108,14 +116,14 @@ export default function group({
 
         //add a new group to the other user
         const addUserDocRef = doc(db, "users", user.id);
-        updateDoc(addUserDocRef, { groups: [groupID] });
-        await newMessage({ groupID });
+        updateDoc(addUserDocRef, { groups: arrayUnion(groupID) });
+        await newMessage({ groupID }); //make new messageGroup
         const messageRef = doc(db, "message", groupID);
         setDoc(messageRef, {});
       } else {
       }
-      console.log("NAVIGATING");
-      navigate(`/chatroom/${groupID}`);
+
+      navigate(`/chatroom/t/${groupID}`);
       // console.log("")
       setShowGroupsPopup(false);
       // navigate("/chatroom");

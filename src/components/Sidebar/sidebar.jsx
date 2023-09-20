@@ -25,26 +25,25 @@ const sidebar = ({ setShowSidebar, showGroupsPopup, setShowGroupsPopup }) => {
   function handleProfile() {
     navigate("/home");
   }
-  // console.log(currentUserGroups);
   useEffect(() => {
     // console.log(currentUserGroups);
-    console.log("SDFSDF");
-    console.log(currentUserGroups);
     if (currentUserGroups.length > 0) {
       const result = currentUserGroups.map((user) => {
         const filteredMembers = user.members.filter(
           (member) => member.username !== currentUserDB.username
         );
-
+        const memberName = filteredMembers.map((member) => member.username);
+        const profileImage = filteredMembers.map((member) => member.photoURL);
+        console.log(3, user);
         return {
           id: user.id,
-          members: filteredMembers.map((member) => member.username),
-          profileImage: filteredMembers.map((member) => member.photoURL),
+          members: memberName,
+          profileImage: profileImage == "" ? <div></div> : <div>F</div>,
           modifiedAt: user.modifiedAt,
           recentMessage: user.recentMessage.messageText,
         };
       });
-
+      console.log(result);
       setUserGroups(result);
     }
   }, [currentUserGroups]);
@@ -55,10 +54,9 @@ const sidebar = ({ setShowSidebar, showGroupsPopup, setShowGroupsPopup }) => {
     setShowGroupsPopup(false);
     // console.log(id);
     // setSelectedMessageID(id);
-    navigate(`/chatroom/${id}`);
+    navigate(`/chatroom/t/${id}`);
   }
   function handleOpenSidebar() {}
-
   return (
     <div className={`sidebar ${isOpen ? "open" : ""}`}>
       {/* <ul className="user-list">
@@ -105,6 +103,7 @@ const sidebar = ({ setShowSidebar, showGroupsPopup, setShowGroupsPopup }) => {
                 }}
               >
                 <img src={group.profileImage} />
+                <div className="fal">{group.profileImage}</div>
                 <div className="textRight">
                   <span className="user-name"> {group.members}</span>
                   <div className="recentText">{group.recentMessage}</div>

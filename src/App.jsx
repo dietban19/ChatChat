@@ -34,7 +34,8 @@ function App() {
               <Route path="/welcome" element={<Welcome />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/login" element={<Login />} />
-              <Route path="/chatroom/:messageID" element={<Chatroom />} />
+              <Route path="/chatroom/t/" element={<Chatroom />} />
+              <Route path="/chatroom/t/:messageID" element={<Chatroom />} />
               <Route path="/chats" element={<Sidebar />} />
               <Route path="/" element={<Navigate to="/welcome" />} />
               <Route path="*" element={<Navigate to="/welcome" />} />

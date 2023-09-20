@@ -35,7 +35,6 @@ export function AuthProvider({ children }) {
       });
   }
   function signOutFunc() {
-    console.log(userRef);
     signOut(auth)
       .then(() => {
         console.log("SIGNOUT");

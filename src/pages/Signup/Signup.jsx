@@ -1,10 +1,11 @@
 import React, { useRef, useState, useContext, useEffect } from "react";
+import { v4 as uuidv4 } from "uuid";
 import { Link, useNavigate } from "react-router-dom";
 import { Form, Button, Card, Alert } from "react-bootstrap";
 import { Container } from "react-bootstrap";
 import { auth, db } from "../../firebase.jsx";
 import { getAdditionalUserInfo } from "firebase/auth";
-import { collection, setDoc, doc } from "firebase/firestore";
+import { collection, setDoc, doc, addDoc } from "firebase/firestore";
 import { AiFillGoogleCircle } from "react-icons/ai";
 import {
   createUserWithEmailAndPassword,
@@ -23,7 +24,18 @@ const Signup = () => {
   const passwordConfirmRef = useRef();
   const { loadingCurrentUser, currentUserDB } = useUserContext();
   const [loading, setLoading] = useState(false);
+  function generateRandomString() {
+    const characters =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let result = "";
 
+    for (let i = 0; i < 28; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length);
+      result += characters[randomIndex];
+    }
+
+    return result;
+  }
   useEffect(() => {
     if (!loadingCurrentUser) {
       if (currentUserDB) {
@@ -32,14 +44,15 @@ const Signup = () => {
       }
     }
   }, [currentUserDB, loadingCurrentUser]);
-  async function addNewUser(result) {
+  async function addNewGoogleUser(result) {
     console.log(result);
     const addUserData = {
       username: result.user.email.split("@")[0],
       id: result.user.uid,
       email: result.user.email,
-      photoURL: result.user.photoURL,
+      photoURL: "",
       loggedIn: true,
+      groups: [],
     };
 
     const userDocRef = doc(db, "users", result.user.uid);
@@ -59,7 +72,7 @@ const Signup = () => {
       // make new instance in user collection if the user is new user
 
       if (userData.isNewUser) {
-        addNewUser(result);
+        addNewGoogleUser(result);
       }
       navigate("/home");
     } catch {
@@ -75,14 +88,40 @@ const Signup = () => {
     // console.log("TESTES", googleResult);
     // cookies.set("auth-token", googleResult.user.refreshToken);
   }
-  function Register(email, password) {
+  async function addNewUser(result) {
+    console.log("ADHD");
+    console.log(result);
+    console.log(result.user.email.split("@")[0]);
+    console.log(result.user.email);
+    console.log(result.user.uid);
+
+    const addUserData = {
+      username: result.user.email.split("@")[0],
+      email: result.user.email,
+      photoURL: "",
+      loggedIn: true,
+      id: result.user.uid,
+      groups: [],
+    };
+    console.log(addUserData);
+    const userDocRef = doc(db, "users", result.user.uid);
+    console.log(1234, userDocRef);
+    console.log("ADDING NEW USER");
+    await setDoc(userDocRef, addUserData);
+  }
+  function Register(email, password, username) {
     console.log(email, password);
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        // // Signed up
-        // const user = userCredential.user;
-        // // ...
+        const result = {
+          email: email,
+          password: password,
+          username: username,
+          id: generateRandomString(),
+        };
+
         console.log("USERCREDNETIAL", userCredential);
+        addNewUser(userCredential);
       })
       .catch((err) => {
         const errorCode = err.code;
@@ -91,6 +130,7 @@ const Signup = () => {
         console.log(errorMessage);
         return errorCode;
       });
+    navigate("/home");
   }
 
   const navigate = useNavigate();
@@ -109,7 +149,11 @@ const Signup = () => {
     try {
       setError("");
       // setLoading(true);
-      await Register(emailRef.current.value, passwordRef.current.value);
+      await Register(
+        emailRef.current.value,
+        passwordRef.current.value,
+        usernameRef.current.vaue
+      );
 
       console.log(showAlert);
       navigate("/login");
@@ -158,10 +202,6 @@ const Signup = () => {
                       <Form.Label>Email address</Form.Label>
                       <Form.Control type="email" ref={emailRef} required />
                     </Form.Group>
-                    {/* <Form.Group id="username">
-              <Form.Label>Username</Form.Label>
-              <Form.Control type="text" ref={usernameRef} required />
-            </Form.Group> */}
                     <Form.Group id="Username" className="mb-4">
                       <Form.Label>Username</Form.Label>
                       <Form.Control type="text" ref={usernameRef} required />
@@ -196,9 +236,9 @@ const Signup = () => {
                   </div>
                 </Card.Body>
               </Card>
-              <div className="w-100 text-center mt-2">
+              {/* <div className="w-100 text-center mt-2">
                 Already Have an Account? <Link to="/login">Login </Link>
-              </div>
+              </div> */}
             </>
           )}
         </>
