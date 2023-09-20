@@ -70,6 +70,9 @@ const Chatroom = () => {
   /* Getting Messages */
 
   useEffect(() => {
+    // if (!messageID) {
+    //   return;
+    // }
     if (
       currentUserDB &&
       currentUserDB.groups &&
@@ -115,7 +118,8 @@ const Chatroom = () => {
   const [formValue, setFormValue] = useState("");
 
   const newMessageRef = async () => {
-    const groupId = messageID; // Make sure messageID is not null or undefined
+    console.log("NEW");
+    const groupId = messageID;
 
     //HERE
     if (messageID) {
@@ -154,6 +158,9 @@ const Chatroom = () => {
   };
 
   useEffect(() => {
+    // if (!messageID) {
+    //   return;
+    // }
     if (allMessages[messageID]) {
       setMessagesToDisplay(allMessages[messageID]);
       const selectedGroup = groups.find((item) => item.id === messageID);
@@ -181,7 +188,6 @@ const Chatroom = () => {
       scrollRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [messagesToDisplay]);
-
   return (
     <div className="chatWrapper">
       {showGroupsPopup && windowWidth <= 768 && (
@@ -206,80 +212,92 @@ const Chatroom = () => {
         showGroupsPopup={showGroupsPopup}
         setShowGroupsPopup={setShowGroupsPopup}
       />
-
-      <div className="chatRoomContainer">
-        {namesInGroup.length > 0 ? (
-          <>
-            <div className="chatRoomHeader">
-              {showGroupsPopup && windowWidth > 768 ? (
-                <>
-                  <div className="addChatPopup">
-                    <AddChat
-                      useAuth={useAuth}
-                      useUserContext={useUserContext}
-                      useMessageContext={useMessageContext}
-                      setShowGroupsPopup={setShowGroupsPopup}
-                      searchResults={searchResults}
-                      searchTerm={searchTerm}
-                      setSearchResults={setSearchResults}
-                      setSearchTerm={setSearchTerm}
-                    />
-                  </div>
-                </>
-              ) : (
-                <div className="selectedChatHeader">
-                  {" "}
-                  {/* <button
-                    onClick={() => {
-                      navigate("/chats");
-                    }}
-                    className="message-submit-button btn-header"
-                  >
-                    <AiOutlineArrowLeft size={16} color="white" />
-                  </button> */}
-                  {/* {namesInGroup.length > 0 ? (
-                <> */}
-                  {namesInGroup.map((user, index) => (
-                    <div className="username" key={index}>
-                      <img src={user.photoURL} />
-                      <span> {user.username}</span>
+      {messageID ? (
+        <div className="chatRoomContainer">
+          {namesInGroup.length > 0 ? (
+            <>
+              <div className="chatRoomHeader">
+                {showGroupsPopup && windowWidth > 768 ? (
+                  <>
+                    <div className="addChatPopup">
+                      <AddChat
+                        useAuth={useAuth}
+                        useUserContext={useUserContext}
+                        useMessageContext={useMessageContext}
+                        setShowGroupsPopup={setShowGroupsPopup}
+                        searchResults={searchResults}
+                        searchTerm={searchTerm}
+                        setSearchResults={setSearchResults}
+                        setSearchTerm={setSearchTerm}
+                      />
                     </div>
-                  ))}
-                  {/* </> */}
-                  {/* ) : (
-                "No names in group"
-              )} */}
-                </div>
-              )}
-            </div>
-            <div className="chatRoomMessages">
-              {messagesToDisplay.map((msg, index) => (
-                <ChatMessage
-                  key={index}
-                  message={msg}
-                  setShowSidebar={setShowSidebar}
-                />
-              ))}
-              <div ref={scrollRef} className="scrollToView"></div>
-            </div>
-            <form onSubmit={sendMessage} className="message-form">
-              <div className="inputContainer">
-                <input
-                  type="text"
-                  value={formValue}
-                  onChange={(e) => setFormValue(e.target.value)}
-                  placeholder="Aa"
-                />
-                <button type="submit" className="message-submit-button">
-                  <AiOutlineArrowRight size={16} color="white" />
-                </button>
+                  </>
+                ) : (
+                  <div className="selectedChatHeader">
+                    {namesInGroup.map((user, index) => (
+                      <div className="username" key={index}>
+                        <img src={user.photoURL} />
+                        <span> {user.username}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
-            </form>
-          </>
-        ) : (
-          <div></div>
-        )}
-      </div>
+              <div className="chatRoomMessages">
+                {messagesToDisplay.map((msg, index) => (
+                  <ChatMessage
+                    key={index}
+                    message={msg}
+                    setShowSidebar={setShowSidebar}
+                  />
+                ))}
+                <div ref={scrollRef} className="scrollToView"></div>
+              </div>
+              <form onSubmit={sendMessage} className="message-form">
+                <div className="inputContainer">
+                  <input
+                    type="text"
+                    value={formValue}
+                    onChange={(e) => setFormValue(e.target.value)}
+                    placeholder="Aa"
+                  />
+                  <button type="submit" className="message-submit-button">
+                    <AiOutlineArrowRight size={16} color="white" />
+                  </button>
+                </div>
+              </form>
+            </>
+          ) : (
+            <div></div>
+          )}
+        </div>
+      ) : (
+        <>
+          <div className="chatRoomHeader">
+            {showGroupsPopup && windowWidth > 768 ? (
+              <>
+                <div className="addChatPopup">
+                  <AddChat
+                    useAuth={useAuth}
+                    useUserContext={useUserContext}
+                    useMessageContext={useMessageContext}
+                    setShowGroupsPopup={setShowGroupsPopup}
+                    searchResults={searchResults}
+                    searchTerm={searchTerm}
+                    setSearchResults={setSearchResults}
+                    setSearchTerm={setSearchTerm}
+                  />
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="empty-message">Start a New Message</div>
+              </>
+            )}
+          </div>
+        </>
+      )}
+
       {/* <button onClick={sendM}>SE</button> */}
     </div>
   );

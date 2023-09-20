@@ -28,7 +28,7 @@ export function UserProvider({ children }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentUserGroups, setCurrentUserGroups] = useState([]);
   const [groups, setGroups] = useState([]);
-
+  const [groupsID, setGroupsID] = useState([]);
   const userQuery = query(userRef);
   async function getUsers() {}
 
@@ -61,9 +61,9 @@ export function UserProvider({ children }) {
         messages.push({ ...doc.data(), id: doc.id });
       });
       const ids = messages.map((item) => item.id);
-      // console.log(messages);
       setGroups(messages);
-      // setGroupsID(ids);
+      console.log("SETTING IDS: ", ids);
+      setGroupsID(ids);
     });
   }, []);
   useEffect(() => {
@@ -84,7 +84,6 @@ export function UserProvider({ children }) {
       const userGroups = groups.filter((group) =>
         currentUserDB.groups.includes(group.id)
       );
-      console.log(userGroups);
       setCurrentUserGroups(userGroups);
     }
   }, [currentUserDB, groups]);
@@ -97,6 +96,7 @@ export function UserProvider({ children }) {
     loadingCurrentUser,
     currentUserGroups,
     groups,
+    groupsID,
     setLoading,
   };
   return (

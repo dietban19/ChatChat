@@ -10,7 +10,7 @@ import "./home.css";
 const home = () => {
   const [error, setError] = useState("");
   const [loadSignOut, setLoadSignOut] = useState(false);
-  const { setSelectedMessageID } = useMessageContext();
+  // const { setSelectedMessageID } = useMessageContext();
   const [selectedMessageId, setSelectedMessageId] = useState("");
   const {
     currentUserDB,
@@ -24,22 +24,17 @@ const home = () => {
   const { authCurrentUser } = useAuth();
   function signOutFunc() {
     signOut(auth)
-      .then(() => {
-        console.log("SIGNOUT");
-      })
+      .then(() => {})
       .catch((error) => {
         // An error happened.
       });
   }
-  //   console.log(currentUserDB, loadingCurrentUser, loading);
+
   useEffect(() => {
-    // console.log("LOADING", loadingCurrentUser);
     if (!loadingCurrentUser) {
-      //   console.log("CURRENT USER", currentUserDB);
       // if not still loading
-      console.log("ITS DONE LOADING", currentUserDB);
+
       if (!currentUserDB) {
-        console.log("go signup");
         navigate("/signup");
       } else {
         console.log("STAY");
@@ -49,12 +44,12 @@ const home = () => {
 
   async function handleLogOut() {
     setError("");
-    console.log("TRUE");
+
     setLoadSignOut(true);
-    console.log("asdf");
+
     try {
       signOutFunc();
-      console.log("SIGNOUT");
+
       setLoadSignOut(false);
       navigate("/signup");
     } catch {
@@ -62,16 +57,19 @@ const home = () => {
     }
   }
   function goChat() {
-    console.log(`/chatroom/${selectedMessageId}`);
-    navigate(`/chatroom/${selectedMessageId}`);
+    if (!selectedMessageId) {
+      navigate(`/chatroom/t/`);
+    } else {
+      navigate(`/chatroom/t/${selectedMessageId}`);
+    }
   }
   useEffect(() => {
-    console.log(currentUserGroups);
+    setSelectedMessageId([]);
+
     if (currentUserGroups && currentUserGroups.length > 0) {
       setSelectedMessageId(currentUserGroups[0].id);
     }
   }, [currentUserGroups]);
-
   return (
     <>
       {loadSignOut ? (
@@ -79,6 +77,7 @@ const home = () => {
       ) : (
         <>
           {" "}
+          {/* <img src={currentUserDB.photoURL} className="image" /> */}
           <div className="name">{currentUserDB && currentUserDB.email}</div>
           <button onClick={handleLogOut}>Sign out</button>
           <button onClick={goChat}>Chatroom</button>

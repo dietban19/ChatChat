@@ -28,7 +28,6 @@ export function MessageProvider({ children }) {
   const messageRef = collection(db, "messages");
   const [selectedMessageID, setSelectedMessageID] = useState("");
   const myQuery = query(messageRef, orderBy("createdAt"), limit(25));
-  const [groups, setGroups] = useState([]);
   const [groupsID, setGroupsID] = useState([]);
   const scrollRef = useRef();
 
@@ -45,20 +44,6 @@ export function MessageProvider({ children }) {
     });
   }, []);
 
-  /* getting all GROUP */
-  useEffect(() => {
-    console.log("getting Groups");
-    const readGroupQuery = query(collection(db, "group"));
-    onSnapshot(readGroupQuery, (querySnapshot) => {
-      const messages = [];
-      querySnapshot.forEach((doc) => {
-        messages.push({ ...doc.data(), id: doc.id });
-      });
-      const ids = messages.map((item) => item.id);
-      setGroups(messages);
-      setGroupsID(ids);
-    });
-  }, []);
   const [formValue, setFormValue] = useState("");
   const newMessageRef = async ({ uid }) => {
     console.log(uid);
@@ -77,15 +62,15 @@ export function MessageProvider({ children }) {
     const messagesRef = collection(groupMessageRef, "messages");
     addDoc(messagesRef, {});
   };
+
+  const selectMessage = async () => {};
   const messageVals = {
     newMessage,
     setSelectedMessageID,
     selectedMessageID,
-    groupsID,
-    groups,
     scrollRef,
   };
-  // const [messages] = useCollectionData(myQuery, { idField: "id" });
+
   return (
     <MessageContext.Provider value={messageVals}>
       {children}
